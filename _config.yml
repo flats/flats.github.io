@@ -3,11 +3,11 @@
 # ----------------------- #
 
 url: http://yoursite.com
-title: My Octopress Blog
-subtitle: A blogging framework for hackers.
-author: Your Name
+title: CrapReduce: DF's DevBlog
+subtitle: "Deep thoughts concerning Ruby, JavaScript, and other things"
+author: D. Flaherty
 simple_search: https://www.google.com/search
-description:
+description: "This is a blog from the keyboard of D. Flaherty, a human being currently attending Flatiron School's Immersive Web Development course in New York, NY."
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
