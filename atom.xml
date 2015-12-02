@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[DF's Blog of Development]]></title>
+  <link href="http://flats.github.io/atom.xml" rel="self"/>
+  <link href="http://flats.github.io/"/>
+  <updated>2015-12-02T17:39:54-05:00</updated>
+  <id>http://flats.github.io/</id>
+  <author>
+    <name><![CDATA[D. Flaherty]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A First Blog Post]]></title>
+    <link href="http://flats.github.io/blog/2015/12/02/first-steps-with-rubys-map-and-reduce-functions/"/>
+    <updated>2015-12-02T17:28:07-05:00</updated>
+    <id>http://flats.github.io/blog/2015/12/02/first-steps-with-rubys-map-and-reduce-functions</id>
+    <content type="html"><![CDATA[<p>Come along with me as I make my way through Flatiron&rsquo;s Web Development Immersive course. Huzzah!</p>
+]]></content>
+  </entry>
+  
+</feed>
