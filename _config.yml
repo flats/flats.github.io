@@ -2,8 +2,8 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://yoursite.com
-title: CrapReduce: DF's DevBlog
+url: http://flats.github.io
+title: "DF's Blog of Development"
 subtitle: "Deep thoughts concerning Ruby, JavaScript, and other things"
 author: D. Flaherty
 simple_search: https://www.google.com/search
