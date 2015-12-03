@@ -1,3 +1,331 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
-@import "footnote";
+
+// Use this to switch between a light or dark theme
+// The light theme is the default.
+$mnml-dark-theme: false;
+
+// Light theme:
+$themebg: #FFF !default;
+$themecolor: #333 !default;
+$themeaccent: #f8f8f8;
+$codeborder: #CCC;
+$codebg: #FAFAFA;
+
+// Dark theme:
+@if $mnml-dark-theme {
+    $themebg: #222;
+    $themecolor: #CCC;
+    $themeaccent: lighten($themebg, 5);
+    $codeborder: lighten($themebg, 5);
+    $codebg: $themebg;
+}
+
+html {
+	background: $themebg;
+}
+
+body {
+	font-family: 'Helvetica Neue', sans-serif;
+	font-size: 16px;
+	font-weight: lighter;
+	color: $themecolor;
+	max-width: 750px;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	
+	h1, h2, h3, h4, h5 {
+		font-family: 'Helvetica Neue', sans-serif;
+		font-weight: 100;
+	}
+
+	a:hover {
+		color: #3a8acc !important;
+		background: $themebg;
+	}
+
+	> header {
+		background: $themebg;
+		padding-top: 2em;
+		padding-bottom: 2em;
+		font-family: 'Helvetica Neue', sans-serif;
+		font-weight: 100;
+		text-align: center;
+		
+		.header-title {
+			font-size: 2em;
+			text-transform: lowercase;
+			letter-spacing: 12px;
+			color: $themecolor;
+			a {
+				color: $themecolor;
+				text-decoration: none;
+			}
+			
+			a:hover {
+				color: #3a8acc;
+			};
+		}
+		
+		.header-subtitle {
+			font-size: 1em;
+			text-transform: uppercase;
+			letter-spacing: 4px;
+			color: #3a8acc;
+		}
+		
+		h1 {
+			a, a:visited, a:hover {
+				color: #8c8c8c;
+			}
+		}
+	}
+
+	> nav {
+		background: $themebg;
+		font-size: 20px;
+		font-weight: 100;
+		border-bottom: 1px solid #b0b0b0;
+		border-top: 1px solid #b0b0b0;
+		padding-left: 0px;
+		padding-right: 0px;
+
+		a {
+				font-family: 'Helvetica Neue', sans-serif;
+           		text-decoration: none;
+				text-shadow: none;
+           		font-size: 22px;
+           		padding-left: 10px;
+           		padding-right: 10px;
+        	}
+		form .search {
+			font-family: 'Helvetica Neue', sans-serif;
+			font-weight: 100;
+			border-radius: 0.2em 0.2em 0.2em 0.2em;
+			box-shadow: none;
+			border: 0px;
+			padding-top: 0.3em;
+			padding-bottom: 0.3em;
+			padding-left: 0.5em;
+			padding-right: 0.5em;
+			background: $themeaccent;
+		}
+
+		li + li {
+			border-left: 0px;
+			a {
+				border: 0px;
+			}
+		}
+	}
+
+	> div {
+		background: $themebg;
+		border-bottom: 0px;
+
+		> div {
+			background: $themebg;
+			border-right-width: 0px;
+		}
+	}
+
+	> footer {
+		text-align: center;
+		background: $themebg;
+		text-shadow: none;
+		color: #BBB;
+	  	padding-left: 0;
+	  	padding-right: 0;
+		border-top: 0px;
+		padding-left: 0px;
+		padding-right: 0px;
+		font-size: 14px;
+		font-family: 'Helvetica Neue', sans-serif;
+		font-weight: 100;
+	}
+
+	#content {
+		> article {
+			padding-top: 2em;
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+
+		> div {
+			> article {
+				padding-left: 0px;
+				padding-right: 0px;
+				padding-top: 2.3em;
+				h1, h2, h3, h4, h5 {
+					font-family: 'Helvetica Neue', sans-serif;
+					font-weight: 100;
+				}
+			}	
+		}
+	}
+}
+
+article {
+
+	.entry-content {
+		h3 {
+			font-style: italic;
+		}
+	}
+
+	ul, ol {
+		margin-left: 2em;
+	}
+
+	a, a:visited {
+		color: #1863A1;
+	}
+}
+
+#content {
+	div.pagination {
+		margin: 0 10px;  
+		padding-bottom: 1.5em;
+		margin-top: 4em;
+		position: relative;
+		text-align: center;
+		border-top: solid 1px #b0b0b0;
+		border-bottom: solid 1px #b0b0b0;
+		color: #888;
+		font-weight: 100;
+		background-image: none;
+	}
+
+	div.pagination a {
+		color: #888;
+	}	
+
+	.blog-index {
+		article {
+			padding-top: 4em;
+
+			header {
+				padding-top: 2em;
+				padding-left: 0;
+  				padding-right: 0;
+			}
+		}
+
+		h1 { // Post Title
+			a {
+				font-family: 'Helvetica Neue', sans-serif;
+				font-weight: 100;
+				font-size: 1.25em;
+				line-height: 1.2em;
+			}
+
+			a:hover {
+				text-decoration: none;
+			}
+		}
+
+		time {
+			font-family: 'Helvetica Neue', sans-serif;
+			font-weight: 100;
+			letter-spacing: 1px;
+			text-transform: none;
+		}
+}
+
+	.hentry {
+		h1.entry-title {
+			font-family: 'Helvetica Neue', sans-serif;
+			font-weight: 100;
+			font-size: 2.75em;		
+		}
+
+		time {
+			font-family: 'Helvetica Neue', sans-serif;
+			font-weight: 100;
+			letter-spacing: 1px;
+			text-transform: none;
+		}
+	}
+}
+
+figure.code {
+	.highlight {
+		.gutter {
+			.line-numbers {
+				background: $themebg !important;
+				text-shadow: none;
+				border-right: 1px solid $codeborder !important;
+			}
+		}
+	}
+    figcaption {
+        border: 1px solid $codeborder !important;
+        span {
+            color: $themecolor;
+        }
+    }
+}
+
+.highlight {
+	border: 1px solid $codeborder !important;
+    figcaption {
+        border: 1px solid $codeborder !important;
+    }
+}
+
+.pre-code, html .gist .gist-file .gist-syntax .highlight pre, .highlight code {
+	background: $codebg !important;
+}
+
+
+aside {
+	display: none;
+}
+
+h1.entry-title {
+	font-family: 'Helvetica Neue', sans-serif;
+	font-weight: 100;
+}
+
+#blog-archives {
+	h2 {
+		font-family: 'Helvetica Neue', sans-serif;
+		font-weight: 100;
+	}
+
+	article {
+		h1 {
+            a { color: $themecolor; }
+			a, a:hover {
+				margin-left: 2.0em;	
+				font-family: 'Helvetica Neue', sans-serif;
+				font-weight: 100;
+				text-decoration: none;
+			}
+		}
+
+		time {
+			font-family: 'Helvetica Neue', sans-serif;
+			font-weight: 100;
+			font-size: 0.9em;
+		}
+	}
+}
+
+.embed-video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16/9 ratio */
+    padding-top: 30px; /* IE6 workaround*/
+    height: 0;
+    overflow: hidden;
+}
+
+.embed-video-container iframe,
+.embed-video-container object,
+.embed-video-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
