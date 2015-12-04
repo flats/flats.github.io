@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Flatiron | DF's Blog of Development]]></title>
+  <title><![CDATA[Category: flatiron | Basic Object]]></title>
   <link href="http://flats.github.io/blog/categories/flatiron/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-02T17:39:54-05:00</updated>
+  <updated>2015-12-04T11:32:23-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -14,11 +14,56 @@
 
   
   <entry>
-    <title type="html"><![CDATA[A First Blog Post]]></title>
-    <link href="http://flats.github.io/blog/2015/12/02/first-steps-with-rubys-map-and-reduce-functions/"/>
-    <updated>2015-12-02T17:28:07-05:00</updated>
-    <id>http://flats.github.io/blog/2015/12/02/first-steps-with-rubys-map-and-reduce-functions</id>
-    <content type="html"><![CDATA[<p>Come along with me as I make my way through Flatiron&rsquo;s Web Development Immersive course. Huzzah!</p>
+    <title type="html"><![CDATA[Getting to Know Ruby's Map and Reduce]]></title>
+    <link href="http://flats.github.io/blog/2015/12/02/getting-to-know-rubys-map-and-reduce/"/>
+    <updated>2015-12-02T21:27:10-05:00</updated>
+    <id>http://flats.github.io/blog/2015/12/02/getting-to-know-rubys-map-and-reduce</id>
+    <content type="html"><![CDATA[<p>Map and reduce are most closely associated with functional programming. Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I’m going to explore a bit of what you can do with them.</p>
+
+<h1 id="first-the-basics">First, the Basics</h1>
+
+<p>As higher-order functions, each of these methods accepts a block and then calls it as it iterates over an enumerable.</p>
+
+<p>Map (or collect)…</p>
+
+<p>Reduce (or inject)… . Scheme, OCaml, and other functional programming languages refer to this as fold.</p>
+
+<h1 id="some-interesting-map-and-reduce-examples">Some Interesting Map and Reduce Examples</h1>
+
+<p>In his series on functional programming in Ruby<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>, Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. One solution proposed by Bradley Grzesiak<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> demonstrates a particularly interesting use of reduce:</p>
+
+<p><code>
+module_name = "X::Y::Z"
+module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{memo[0]}::#{x}") }
+=&gt; ["X::Y::Z", "X::Y", "X"]
+</code></p>
+
+<p>Let’s break this code down into separate steps.</p>
+
+<ol>
+  <li>
+    <p>Bradley splits <code>module_name</code>, which is our starting string, into the array [“X”, “Y”, “Z”].</p>
+  </li>
+  <li>
+    <p>He then uses the <code>inject</code> using the <code>inject(initial)</code> syntax, which will initialize the accumulator, called <code>memo</code>, to an empty array.</p>
+  </li>
+  <li>
+    <p>Now the iteration begins. If this new ‘memo’ array is empty, which will only happen on the first iteration of <code>inject</code>, <code>inject</code> adds that element (“X”) to the beginning of <code>memo</code> (using <code>unshift</code>). Otherwise, <code>inject</code> adds a string to <code>memo</code> containing the result of the previous iteration (“X”), the separator (“::”), and the current element (“Y”).</p>
+  </li>
+</ol>
+
+<p>So, the final array is built backwards: [“X”], then [“X::Y”, “X”], and then finally [“X::Y::Z”, “X::Y”, “X”]. Nifty.</p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/ <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>http://rubyquicktips.com/post/1018776470/embracing-functional-programming <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 ]]></content>
   </entry>
   
