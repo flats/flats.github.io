@@ -19,7 +19,7 @@ Reduce (or inject)... . Scheme, OCaml, and other functional programming language
 Some Interesting Map and Reduce Examples
 ========================================
 
-In his series on functional programming in Ruby[^1], Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. One solution proposed by Bradley Grzesiak[^2] demonstrates a particularly interesting use of reduce:
+In his [series on functional programming in Ruby](http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/), Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. [One solution proposed by Bradley Grzesiak](http://rubyquicktips.com/post/1018776470/embracing-functional-programming) demonstrates a particularly interesting use of reduce:
 
 ```
 module_name = "X::Y::Z"
@@ -29,7 +29,7 @@ module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{
 
 Let's break this code down into separate steps.
 
-1. Bradley splits `module_name`, which is our starting string, into the array ["X", "Y", "Z"].
+1. Mr. Grzesiak splits `module_name`, which is our starting string, into the array ["X", "Y", "Z"].
 
 2. He then uses the `inject` using the `inject(initial)` syntax, which will initialize the accumulator, called `memo`, to an empty array.
 
@@ -37,6 +37,15 @@ Let's break this code down into separate steps.
 
 So, the final array is built backwards: ["X"], then ["X::Y", "X"], and then finally ["X::Y::Z", "X::Y", "X"]. Nifty.
 
+Haitham Mohammad [put `transpose` through its paces](http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce) on [Ruby Quicktips](http://rubyquicktips.com/), the same site that gave us the above solution. Transpose, [according to the Ruby documentation](http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose), "assumes that self is an array of arrays and transposes the rows and columns." In other words, if you imagine an array of arrays as rows in a table, `transpose` will return the columns from that table.
 
-[^1]: http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/
-[^2]: http://rubyquicktips.com/post/1018776470/embracing-functional-programming
+Mr. Mohammad then shows us how to get the sum of each column of table represented by an array of row arrays.
+
+```
+a = [1, 2, 3]
+b = [4, 5, 6]
+c = [7, 8, 9]
+
+[a, b, c].transpose.map { |x| x.reduce :+ }
+# => [12, 15, 18]
+```
