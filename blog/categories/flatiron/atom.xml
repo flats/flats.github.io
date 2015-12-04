@@ -4,7 +4,7 @@
   <title><![CDATA[Category: flatiron | Basic Object]]></title>
   <link href="http://flats.github.io/blog/categories/flatiron/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-04T11:32:23-05:00</updated>
+  <updated>2015-12-04T13:17:27-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -30,7 +30,7 @@
 
 <h1 id="some-interesting-map-and-reduce-examples">Some Interesting Map and Reduce Examples</h1>
 
-<p>In his series on functional programming in Ruby<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>, Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. One solution proposed by Bradley Grzesiak<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> demonstrates a particularly interesting use of reduce:</p>
+<p>In his <a href="http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/">series on functional programming in Ruby</a>, Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. <a href="http://rubyquicktips.com/post/1018776470/embracing-functional-programming">One solution proposed by Bradley Grzesiak</a> demonstrates a particularly interesting use of reduce:</p>
 
 <p><code>
 module_name = "X::Y::Z"
@@ -42,7 +42,7 @@ module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{
 
 <ol>
   <li>
-    <p>Bradley splits <code>module_name</code>, which is our starting string, into the array [“X”, “Y”, “Z”].</p>
+    <p>Mr. Grzesiak splits <code>module_name</code>, which is our starting string, into the array [“X”, “Y”, “Z”].</p>
   </li>
   <li>
     <p>He then uses the <code>inject</code> using the <code>inject(initial)</code> syntax, which will initialize the accumulator, called <code>memo</code>, to an empty array.</p>
@@ -54,16 +54,18 @@ module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{
 
 <p>So, the final array is built backwards: [“X”], then [“X::Y”, “X”], and then finally [“X::Y::Z”, “X::Y”, “X”]. Nifty.</p>
 
-<div class="footnotes">
-  <ol>
-    <li id="fn:1">
-      <p>http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/ <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
-    </li>
-    <li id="fn:2">
-      <p>http://rubyquicktips.com/post/1018776470/embracing-functional-programming <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
-    </li>
-  </ol>
-</div>
+<p>Haitham Mohammad <a href="http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce">put <code>transpose</code> through its paces</a> on <a href="http://rubyquicktips.com/">Ruby Quicktips</a>, the same site that gave us the above solution. Transpose, <a href="http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose">according to the Ruby documentation</a>, “assumes that self is an array of arrays and transposes the rows and columns.” In other words, if you imagine an array of arrays as rows in a table, <code>transpose</code> will return the columns from that table.</p>
+
+<p>Mr. Mohammad then shows us how to get the sum of each column of table represented by an array of row arrays.</p>
+
+<p>```
+a = [1, 2, 3]
+b = [4, 5, 6]
+c = [7, 8, 9]</p>
+
+<p>[a, b, c].transpose.map { |x| x.reduce :+ }
+# =&gt; [12, 15, 18]
+```</p>
 ]]></content>
   </entry>
   
