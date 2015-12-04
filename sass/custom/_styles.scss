@@ -332,6 +332,27 @@ h1.entry-title {
 
 /* Custom Styles for Basic Object, DF, 12/2015 */
 
+@media only screen and (min-width: 550px) {
+	body>nav form {
+		margin-top: 0.15em;
+		margin-right: 0.35em;
+	}
+}
+
+@media only screen and (min-width: 768px) {
+	body>nav form {
+		margin-right: 0.3em;
+	}
+}
+
+body>nav form {
+	margin-right: 0.2em;
+}
+
+body>nav ul.subscription {
+	display: none;
+}
+
 .footnotes {
 	margin-top: 3em;
 	padding-top: 1em;
@@ -340,4 +361,17 @@ h1.entry-title {
 
 .footnotes ol li p {
 	margin-bottom: .5em;
+}
+
+article hr {
+	margin: 2em auto;
+	background-color: transparent;
+	border: 0;
+    text-align: center;
+}
+
+article hr:after {
+    content: "\2014\0020\2014\0020\2014";
+    letter-spacing: 1.5em;
+    color: #aaa;
 }

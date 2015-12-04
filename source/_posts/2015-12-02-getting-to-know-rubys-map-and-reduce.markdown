@@ -19,6 +19,8 @@ As higher-order functions, each of these methods accepts a function in the form 
 Some Interesting Map and Reduce Examples
 ========================================
 
+Some real magic happens when you chain these functions together. First, I'll look at a cool example of using `map` on its own, but then I'll get into some uses of reduce chained on to the end of map.
+
 In his [series on functional programming in Ruby](http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/), Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. [One solution proposed by Bradley Grzesiak](http://rubyquicktips.com/post/1018776470/embracing-functional-programming) demonstrates a particularly interesting use of reduce:
 
 ```
@@ -37,9 +39,9 @@ Let's break this code down into separate steps.
 
 So, the final array is built backwards: ["X"], then ["X::Y", "X"], and then finally ["X::Y::Z", "X::Y", "X"]. Nifty.
 
-Haitham Mohammad [put `transpose` through its paces](http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce) on [Ruby Quicktips](http://rubyquicktips.com/), the same site that gave us the above solution. Transpose, [according to the Ruby documentation](http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose), "assumes that self is an array of arrays and transposes the rows and columns." In other words, if you imagine an array of arrays as rows in a table, `transpose` will return the columns from that table.
-
 - - -
+
+Haitham Mohammad [put `transpose` through its paces](http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce) on [Ruby Quicktips](http://rubyquicktips.com/), the same site that gave us the above solution. Transpose, [according to the Ruby documentation](http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose), "assumes that self is an array of arrays and transposes the rows and columns." In other words, if you imagine an array of arrays as rows in a table, `transpose` will return the columns from that table.
 
 Mr. Mohammad then shows us how to get the sum of each column of table represented by an array of row arrays.
 
