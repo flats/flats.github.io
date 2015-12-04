@@ -4,7 +4,7 @@
   <title><![CDATA[Category: flatiron | Basic Object]]></title>
   <link href="http://flats.github.io/blog/categories/flatiron/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-04T14:43:48-05:00</updated>
+  <updated>2015-12-04T14:54:05-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -30,6 +30,8 @@
 
 <h1 id="some-interesting-map-and-reduce-examples">Some Interesting Map and Reduce Examples</h1>
 
+<p>Some real magic happens when you chain these functions together. First, I’ll look at a cool example of using <code>map</code> on its own, but then I’ll get into some uses of reduce chained on to the end of map.</p>
+
 <p>In his <a href="http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/">series on functional programming in Ruby</a>, Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. <a href="http://rubyquicktips.com/post/1018776470/embracing-functional-programming">One solution proposed by Bradley Grzesiak</a> demonstrates a particularly interesting use of reduce:</p>
 
 <p><code>
@@ -54,9 +56,9 @@ module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{
 
 <p>So, the final array is built backwards: [“X”], then [“X::Y”, “X”], and then finally [“X::Y::Z”, “X::Y”, “X”]. Nifty.</p>
 
-<p>Haitham Mohammad <a href="http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce">put <code>transpose</code> through its paces</a> on <a href="http://rubyquicktips.com/">Ruby Quicktips</a>, the same site that gave us the above solution. Transpose, <a href="http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose">according to the Ruby documentation</a>, “assumes that self is an array of arrays and transposes the rows and columns.” In other words, if you imagine an array of arrays as rows in a table, <code>transpose</code> will return the columns from that table.</p>
-
 <hr />
+
+<p>Haitham Mohammad <a href="http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce">put <code>transpose</code> through its paces</a> on <a href="http://rubyquicktips.com/">Ruby Quicktips</a>, the same site that gave us the above solution. Transpose, <a href="http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose">according to the Ruby documentation</a>, “assumes that self is an array of arrays and transposes the rows and columns.” In other words, if you imagine an array of arrays as rows in a table, <code>transpose</code> will return the columns from that table.</p>
 
 <p>Mr. Mohammad then shows us how to get the sum of each column of table represented by an array of row arrays.</p>
 
