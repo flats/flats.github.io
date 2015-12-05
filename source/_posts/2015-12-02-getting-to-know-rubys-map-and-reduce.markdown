@@ -10,11 +10,11 @@ Map and reduce are most closely associated with functional programming. Even so,
 First, the Basics
 =================
 
-As higher-order functions, each of these methods accepts a function in the form of a block and then calls it as it iterates over an enumerable object.
+As higher-order functions, each of these methods accepts a function in the form of a block. They then iterate over an enumerable object and call this block on each iteration. Where they differ is in what they do with the result of this block.
 
 `map` (or `collect`) returns an array containing the results of calling the supplied block on each element of the enumerable. In other words, map allows you to apply a function to every element of a data structure and receive the result.
 
-`reduce` (or `inject`) returns a value that is the result of applying a binary operation to the return value of applying the supplied block to each element of the enumerable. Whoa. What a mouthful. In other words, `reduce` "reduces" each element of an enumerable to a single value, accumulates that value in a single variable, and then returns the value of the accumulator. Scheme, OCaml, and other functional programming languages refer to this as fold.
+`reduce` (or `inject`) returns a value that is the result of applying a binary operation to the return value of applying the supplied block to each element of the enumerable. Whoa. What a mouthful. In other words, `reduce` "reduces" each element of an enumerable to a single value, accumulates that value in a single variable, and then returns the value of the accumulator. Some functional languages, such Scheme and OCaml, refer to this as `fold`.
 
 Some Interesting Map and Reduce Examples
 ========================================
