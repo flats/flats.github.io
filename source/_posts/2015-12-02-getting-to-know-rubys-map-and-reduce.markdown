@@ -5,7 +5,7 @@ date: 2015-12-02 21:27:10 -0500
 comments: true
 categories: "Flatiron School"
 ---
-Map and reduce are most closely associated with functional programming. Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I'm going to explore a bit of what you can do with them.
+Map and reduce are most closely associated with functional programming[^1]. Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I'm going to explore a bit of what you can do with them.
 
 First, the Basics
 =================
@@ -19,7 +19,7 @@ As higher-order functions, each of these methods accepts a function in the form 
 Some Interesting Map and Reduce Examples
 ========================================
 
-Some real magic happens when you chain these functions together. First, I'll look at a cool example of using `map` on its own, but then I'll get into some uses of reduce chained on to the end of map.
+These functions are very powerful when used together. First, I'll look at a cool example of using `map` on its own, but then I'll get into some uses of reduce chained on to the end of map.
 
 In his [series on functional programming in Ruby](http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/), Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. [One solution proposed by Bradley Grzesiak](http://rubyquicktips.com/post/1018776470/embracing-functional-programming) demonstrates a particularly interesting use of reduce:
 
@@ -41,7 +41,7 @@ So, the final array is built backwards: ["X"], then ["X::Y", "X"], and then fina
 
 - - -
 
-Haitham Mohammad [put `transpose` through its paces](http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce) on [Ruby Quicktips](http://rubyquicktips.com/), the same site that gave us the above solution. Transpose, [according to the Ruby documentation](http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose), "assumes that self is an array of arrays and transposes the rows and columns." In other words, if you imagine an array of arrays as rows in a table, `transpose` will return the columns from that table.
+Haitham Mohammad put `transpose` [through its paces](http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce) on [Ruby Quicktips](http://rubyquicktips.com/), the same site that gave us the above solution. `transpose`, [according to the Ruby documentation](http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose), "assumes that self is an array of arrays and transposes the rows and columns." In other words, if you imagine an array of arrays as rows in a table, `transpose` will return the columns from that table.
 
 Mr. Mohammad then shows us how to get the sum of each column of table represented by an array of row arrays.
 
@@ -53,3 +53,5 @@ c = [7, 8, 9]
 [a, b, c].transpose.map { |x| x.reduce :+ }
 # => [12, 15, 18]
 ```
+
+[^1] [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm.
