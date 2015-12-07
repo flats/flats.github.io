@@ -9,7 +9,7 @@
   <meta name="author" content="D. Flaherty">
 
   
-  <meta name="description" content="Map and reduce are most closely associated with functional programming. Even so, Ruby, the object-oriented-est of all object-oriented programming &hellip;">
+  <meta name="description" content="Map and reduce are most closely associated with functional programming[^1]. Even so, Ruby, the object-oriented-est of all object-oriented programming &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -98,7 +98,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Map and reduce are most closely associated with functional programming. Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I’m going to explore a bit of what you can do with them.</p>
+  <div class="entry-content"><p>Map and reduce are most closely associated with functional programming[^1]. Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I’m going to explore a bit of what you can do with them.</p>
 
 <h1 id="first-the-basics">First, the Basics</h1>
 
@@ -110,7 +110,7 @@
 
 <h1 id="some-interesting-map-and-reduce-examples">Some Interesting Map and Reduce Examples</h1>
 
-<p>Some real magic happens when you chain these functions together. First, I’ll look at a cool example of using <code>map</code> on its own, but then I’ll get into some uses of reduce chained on to the end of map.</p>
+<p>These functions are very powerful when used together. First, I’ll look at a cool example of using <code>map</code> on its own, but then I’ll get into some uses of reduce chained on to the end of map.</p>
 
 <p>In his <a href="http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/">series on functional programming in Ruby</a>, Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. <a href="http://rubyquicktips.com/post/1018776470/embracing-functional-programming">One solution proposed by Bradley Grzesiak</a> demonstrates a particularly interesting use of reduce:</p>
 
@@ -139,7 +139,7 @@
 
 <hr />
 
-<p>Haitham Mohammad <a href="http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce">put <code>transpose</code> through its paces</a> on <a href="http://rubyquicktips.com/">Ruby Quicktips</a>, the same site that gave us the above solution. Transpose, <a href="http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose">according to the Ruby documentation</a>, “assumes that self is an array of arrays and transposes the rows and columns.” In other words, if you imagine an array of arrays as rows in a table, <code>transpose</code> will return the columns from that table.</p>
+<p>Haitham Mohammad put <code>transpose</code> <a href="http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce">through its paces</a> on <a href="http://rubyquicktips.com/">Ruby Quicktips</a>, the same site that gave us the above solution. <code>transpose</code>, <a href="http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose">according to the Ruby documentation</a>, “assumes that self is an array of arrays and transposes the rows and columns.” In other words, if you imagine an array of arrays as rows in a table, <code>transpose</code> will return the columns from that table.</p>
 
 <p>Mr. Mohammad then shows us how to get the sum of each column of table represented by an array of row arrays.</p>
 
@@ -155,6 +155,8 @@
 </span><span class="line">
 </span><span class="line">[a, b, c].transpose.map { |x| x.reduce :+ }
 </span><span class="line"># =&gt; [12, 15, 18]</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>[^1] <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>, one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm.</p>
 </div>
   
   
