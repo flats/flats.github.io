@@ -39,7 +39,13 @@ memo.send(:+, 3) # => 6
 memo.send(:+, 4) # => 10
 ```
 
-If you don't declare an initial value, the initial value will be the first element of the collection.
+If you don't declare an initial value, the initial value will be the first element of the collection. There's also the option of passing a block instead of the name of a function, which would look like
+
+```
+array.reduce(0) { |sum, element| sum + element } # => 10
+```
+
+for the example above.
 
 Some Interesting Map and Reduce Examples
 ========================================
