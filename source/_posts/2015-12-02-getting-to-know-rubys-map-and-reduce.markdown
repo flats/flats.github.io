@@ -5,7 +5,7 @@ date: 2015-12-02 21:27:10 -0500
 comments: true
 categories: "Flatiron School"
 ---
-Map and reduce are most closely associated with functional programming.[^1] Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I'm going to explore a bit of what you can do with them. I'm going to explain these methods exhaustively, so get ready for a very long blog post.
+Map and reduce are most closely associated with functional programming.[^1] Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I'm going to explore how to use these methods and what you can do with them, especially when you use them together. This will be pretty exhaustive, so be prepared for a *very* long blog post.
 
 First, the Basics
 =================
@@ -83,6 +83,19 @@ c = [7, 8, 9]
 
 [a, b, c].transpose.map { |x| x.reduce :+ }
 # => [12, 15, 18]
+```
+
+- - -
+
+Finally, I'll use these two functions with lambdas in an example that I've whipped up for this blog entry. Suppose we have a hash of restaurant reviews that look like this:
+
+```
+{
+    name = "A Nice Restaurant",
+    address = "123 Nice Pl.",
+    city = "Nice City"
+
+}
 ```
 
 [^1]: [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm.
