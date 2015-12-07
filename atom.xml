@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-07T09:29:50-05:00</updated>
+  <updated>2015-12-07T12:14:25-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -21,7 +21,7 @@
     <updated>2015-12-02T21:27:10-05:00</updated>
     <id>http://flats.github.io/blog/2015/12/02/getting-to-know-rubys-map-and-reduce</id>
     
-    <content type="html"><![CDATA[<p>Map and reduce are most closely associated with functional programming.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I’m going to explore a bit of what you can do with them.</p>
+    <content type="html"><![CDATA[<p>Map and reduce are most closely associated with functional programming.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I’m going to explore a bit of what you can do with them. I’m going to explain these methods exhaustively, so get ready for a very long blog post.</p>
 
 <h1 id="first-the-basics">First, the Basics</h1>
 
@@ -30,6 +30,40 @@
 <p><code>map</code> (or <code>collect</code>) returns an array containing the results of calling the supplied block on each element of the enumerable. In other words, map allows you to apply a function to every element of a data structure and receive the result.</p>
 
 <p><code>reduce</code> (or <code>inject</code>) returns a value that is the result of applying a binary operation to the return value of applying the supplied block to each element of the enumerable. Whoa. What a mouthful. In other words, <code>reduce</code> “reduces” each element of an enumerable to a single value, accumulates that value in a single variable, and then returns the value of the accumulator. Some functional languages, such Scheme and OCaml, refer to this as <code>fold</code>.</p>
+
+<p>The simplest use of <code>reduce</code> is just <code>collection.reduce(initial_value, :name_of_method)</code>. For example,</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">array = [1, 2, 3, 4] # =&gt; [1, 2, 3, 4]
+</span><span class="line">array.reduce(0, :+) =&gt; 10</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>calls the <code>:+</code> for each element in the array. The method that we specify (in this case, <code>:+</code>) has to be a binary method (a method called on one object with a single argument of another object), so we need a starting value, which we have in this case specified as 0. As we iterate through the array using reduce, this is what happens at each stage of the iteration:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># reduce sets up an accumulator variable, memo, and sets it to the initial
+</span><span class="line"># value, which is 0.
+</span><span class="line">memo = 0
+</span><span class="line"># Now we hit the first element of the array.
+</span><span class="line">memo.send(:+, 1) # =&gt; 1
+</span><span class="line"># The line above is the same as memo += 1
+</span><span class="line">memo.send(:+, 2) # =&gt; 3
+</span><span class="line">memo.send(:+, 3) # =&gt; 6
+</span><span class="line"># This is the last time through the array, so the value of memo at the end
+</span><span class="line"># of this is the return value for reduce.
+</span><span class="line">memo.send(:+, 4) # =&gt; 10</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>If you don’t declare an initial value, the initial value will be the first element of the collection.</p>
 
 <h1 id="some-interesting-map-and-reduce-examples">Some Interesting Map and Reduce Examples</h1>
 
