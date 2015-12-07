@@ -5,7 +5,7 @@ date: 2015-12-02 21:27:10 -0500
 comments: true
 categories: "Flatiron School"
 ---
-Map and reduce are most closely associated with functional programming.[^1] Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I'm going to explore a bit of what you can do with them.
+Map and reduce are most closely associated with functional programming.[^1] Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I'm going to explore a bit of what you can do with them. I'm going to explain these methods exhaustively, so get ready for a very long blog post.
 
 First, the Basics
 =================
@@ -15,6 +15,31 @@ As higher-order functions, each of these methods accepts a function in the form 
 `map` (or `collect`) returns an array containing the results of calling the supplied block on each element of the enumerable. In other words, map allows you to apply a function to every element of a data structure and receive the result.
 
 `reduce` (or `inject`) returns a value that is the result of applying a binary operation to the return value of applying the supplied block to each element of the enumerable. Whoa. What a mouthful. In other words, `reduce` "reduces" each element of an enumerable to a single value, accumulates that value in a single variable, and then returns the value of the accumulator. Some functional languages, such Scheme and OCaml, refer to this as `fold`.
+
+The simplest use of `reduce` is just `collection.reduce(initial_value, :name_of_method)`. For example,
+
+```
+array = [1, 2, 3, 4] # => [1, 2, 3, 4]
+array.reduce(0, :+) => 10
+```
+
+calls the `:+` for each element in the array. The method that we specify (in this case, `:+`) has to be a binary method (a method called on one object with a single argument of another object), so we need a starting value, which we have in this case specified as 0. As we iterate through the array using reduce, this is what happens at each stage of the iteration:
+
+```
+# reduce sets up an accumulator variable, memo, and sets it to the initial
+# value, which is 0.
+memo = 0
+# Now we hit the first element of the array.
+memo.send(:+, 1) # => 1
+# The line above is the same as memo += 1
+memo.send(:+, 2) # => 3
+memo.send(:+, 3) # => 6
+# This is the last time through the array, so the value of memo at the end
+# of this is the return value for reduce.
+memo.send(:+, 4) # => 10
+```
+
+If you don't declare an initial value, the initial value will be the first element of the collection.
 
 Some Interesting Map and Reduce Examples
 ========================================
