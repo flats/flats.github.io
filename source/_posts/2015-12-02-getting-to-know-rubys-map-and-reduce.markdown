@@ -87,15 +87,51 @@ c = [7, 8, 9]
 
 - - -
 
-Finally, I'll use these two functions with lambdas in an example that I've whipped up for this blog entry. Suppose we have a hash of restaurant reviews that look like this:
+Finally, I'll use these two functions with lambdas in an example that I've whipped up for this blog entry.[^2] Suppose we have a hash of restaurant reviews that look like this:
 
 ```
 {
-    name = "A Nice Restaurant",
-    address = "123 Nice Pl.",
-    city = "Nice City"
-
+    name: "A Nice Restaurant",
+    address: "123 Nice Pl.",
+    city: "Nice City",
+    reviews: {
+        {
+            reviewer_name => 'John Doe',
+            reviewer_score => 4,
+            reviewer_would_recommend => true,
+            review_blurb => "I love this place!"
+        },
+        {
+            reviewer_name => 'Jane Doe',
+            reviewer_score => 5,
+            reviewer_would_recommend => true,
+            review_blurb => "I love, love, love this place!"
+        },
+        {
+            reviewer_name => 'Dohn Joe',
+            reviewer_score => 2,
+            reviewer_would_recommend => false,
+            review_blurb => "I do not like this place."
+        },
+        {
+            reviewer_name => 'Dane Joe',
+            reviewer_score => 1,
+            reviewer_would_recommend => false,
+            review_blurb => "I hate this place!"
+        },
+        {
+            reviewer_name => 'John Jane',
+            reviewer_score => 1,
+            reviewer_would_recommend => false,
+            review_blurb => "Do not go to this place."
+        }
+    }
 }
 ```
 
+Obviously, this is a very simplistic representation of how you would actually design a data structure for restaurant reviews, but it'll do for our purposes.
+
+
 [^1]: [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm.
+
+[^2]: Credit to [David Yeung's blog](http://yeungda.com/2011/11/01/ruby-lambda-keyword.html) for examples of using higher-order functions with lambdas.
