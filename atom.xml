@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-07T09:27:27-05:00</updated>
+  <updated>2015-12-07T09:29:50-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -21,7 +21,7 @@
     <updated>2015-12-02T21:27:10-05:00</updated>
     <id>http://flats.github.io/blog/2015/12/02/getting-to-know-rubys-map-and-reduce</id>
     
-    <content type="html"><![CDATA[<p>Map and reduce are most closely associated with functional programming[^1]. Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I’m going to explore a bit of what you can do with them.</p>
+    <content type="html"><![CDATA[<p>Map and reduce are most closely associated with functional programming.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I’m going to explore a bit of what you can do with them.</p>
 
 <h1 id="first-the-basics">First, the Basics</h1>
 
@@ -79,7 +79,13 @@
 </span><span class="line">[a, b, c].transpose.map { |x| x.reduce :+ }
 </span><span class="line"># =&gt; [12, 15, 18]</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>[^1] <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>, one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm.</p>
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p><a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>, one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 ]]></content>
     
   </entry>
