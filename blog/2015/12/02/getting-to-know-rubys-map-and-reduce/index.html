@@ -137,7 +137,12 @@
 </span><span class="line"># of this is the return value for reduce.
 </span><span class="line">memo.send(:+, 4) # =&gt; 10</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>If you don’t declare an initial value, the initial value will be the first element of the collection.</p>
+<p>If you don’t declare an initial value, the initial value will be the first element of the collection. There’s also the option of passing a block instead of the name of a function, which would look like</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">array.reduce(0) { |sum, element| sum + element } # =&gt; 10</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>for the example above.</p>
 
 <h1 id="some-interesting-map-and-reduce-examples">Some Interesting Map and Reduce Examples</h1>
 
