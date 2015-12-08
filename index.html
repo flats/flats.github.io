@@ -9,7 +9,7 @@
   <meta name="author" content="D. Flaherty">
 
   
-  <meta name="description" content="Map and reduce are most closely associated with functional programming.1 Even so, Ruby, the object-oriented-est of all object-oriented programming &hellip;">
+  <meta name="description" content="The #map and #reduce functions are most closely associated with functional programming.1 Even so, Ruby, the object-oriented-est of all object- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -98,26 +98,24 @@
   </header>
 
 
-  <div class="entry-content"><p>Map and reduce are most closely associated with functional programming.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I’m going to explore a bit of what you can do with them. I’m going to explain these methods exhaustively, so get ready for a very long blog post.</p>
+  <div class="entry-content"><p>The <code>#map</code> and <code>#reduce</code> functions are most closely associated with functional programming.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I’m going to explore how to use these methods and what you can do with them, especially when you use them together. This will be pretty exhaustive, so be prepared for a <em>very</em> long blog post.</p>
 
 <h1 id="first-the-basics">First, the Basics</h1>
 
-<p>As higher-order functions, each of these methods accepts a function in the form of a block. They then iterate over an enumerable object and call this block on each iteration. Where they differ is in what they do with the result of this block.</p>
+<p>As <a href="https://en.wikipedia.org/wiki/Higher-order_function">higher-order functions</a>, each of these methods accepts a function in the form of a block. They then iterate over an enumerable object and call this block on each iteration. Where they differ is in what they do with the result of this block.</p>
 
-<p><code>map</code> (or <code>collect</code>) returns an array containing the results of calling the supplied block on each element of the enumerable. In other words, map allows you to apply a function to every element of a data structure and receive the result.</p>
+<p><code>#map</code> (or <code>#collect</code>) returns an array containing the results of calling the supplied block on each element of the enumerable. In other words, map allows you to apply a function to every element of a data structure and receive the result.</p>
 
-<p><code>reduce</code> (or <code>inject</code>) returns a value that is the result of applying a binary operation to the return value of applying the supplied block to each element of the enumerable. Whoa. What a mouthful. In other words, <code>reduce</code> “reduces” each element of an enumerable to a single value, accumulates that value in a single variable, and then returns the value of the accumulator. Some functional languages, such Scheme and OCaml, refer to this as <code>fold</code>.</p>
+<p><code>#reduce</code> (or <code>#inject</code>) returns a value that is the result of applying a binary operation to the return value of applying the supplied block to each element of the enumerable. Whoa. What a mouthful. In other words, <code>#reduce</code> “reduces” each element of an enumerable to a single value, accumulates that value in a single variable, and then returns the value of the accumulator. Some functional languages, such Scheme and OCaml, refer to this function as <code>fold</code>.</p>
 
-<p>The simplest use of <code>reduce</code> is just <code>collection.reduce(initial_value, :name_of_method)</code>. For example,</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<p>The simplest use of <code>#reduce</code> is just <code>collection.reduce(initial_value, :name_of_method)</code>. For example,</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">array = [1, 2, 3, 4] # =&gt; [1, 2, 3, 4]
-</span><span class="line">array.reduce(0, :+) =&gt; 10</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>calls the <code>:+</code> for each element in the array. The method that we specify (in this case, <code>:+</code>) has to be a binary method (a method called on one object with a single argument of another object), so we need a starting value, which we have in this case specified as 0. As we iterate through the array using reduce, this is what happens at each stage of the iteration:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">array</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="o">]</span> <span class="c1"># =&gt; [1, 2, 3, 4]</span>
+</span><span class="line"><span class="n">array</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="ss">:+</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="mi">10</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>calls the <code>#+</code> for each element in the array. The method that we specify (in this case, <code>#+</code>) has to be a binary method (a method called on one object with a single argument of another object), so we need a starting value, which we have in this case specified as 0. As we iterate through the array using reduce, this is what happens at each stage of the iteration:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -128,38 +126,36 @@
 <span class="line-number">9</span>
 <span class="line-number">10</span>
 <span class="line-number">11</span>
-</pre></td><td class="code"><pre><code class=""><span class="line"># reduce sets up an accumulator variable, memo, and sets it to the initial
-</span><span class="line"># value, which is 0.
-</span><span class="line">memo = 0
-</span><span class="line"># Now we hit the first element of the array.
-</span><span class="line">memo.send(:+, 1) # =&gt; 1
-</span><span class="line"># The line above is the same as memo += 1
-</span><span class="line">memo.send(:+, 2) # =&gt; 3
-</span><span class="line">memo.send(:+, 3) # =&gt; 6
-</span><span class="line"># This is the last time through the array, so the value of memo at the end
-</span><span class="line"># of this is the return value for reduce.
-</span><span class="line">memo.send(:+, 4) # =&gt; 10</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># reduce sets up an accumulator variable, memo, and sets it to the initial</span>
+</span><span class="line"><span class="c1"># value, which is 0.</span>
+</span><span class="line"><span class="n">memo</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class="line"><span class="c1"># Now we hit the first element of the array.</span>
+</span><span class="line"><span class="n">memo</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:+</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># =&gt; 1</span>
+</span><span class="line"><span class="c1"># The line above is the same as memo += 1 or memo.+(1).</span>
+</span><span class="line"><span class="n">memo</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:+</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># =&gt; 3</span>
+</span><span class="line"><span class="n">memo</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:+</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># =&gt; 6</span>
+</span><span class="line"><span class="c1"># This is the last time through the array, so the value of memo at the end</span>
+</span><span class="line"><span class="c1"># of this is the return value for reduce.</span>
+</span><span class="line"><span class="n">memo</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:+</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1"># =&gt; 10</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>If you don’t declare an initial value, the initial value will be the first element of the collection. There’s also the option of passing a block instead of the name of a function, which would look like</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">array.reduce(0) { |sum, element| sum + element } # =&gt; 10</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">array</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">sum</span><span class="p">,</span> <span class="n">element</span><span class="o">|</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">element</span> <span class="p">}</span> <span class="c1"># =&gt; 10</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>for the example above.</p>
 
 <h1 id="some-interesting-map-and-reduce-examples">Some Interesting Map and Reduce Examples</h1>
 
-<p>These functions are very powerful when used together. First, I’ll look at a cool example of using <code>map</code> on its own, but then I’ll get into some uses of reduce chained on to the end of map.</p>
+<p>These functions are very powerful when used together. First, I’ll look at a couple of examples of using <code>#map</code> and <code>#reduce</code> on their own, and then I’ll get into an example of using reduce chained on to the end of map.</p>
 
-<p>In his <a href="http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/">series on functional programming in Ruby</a>, Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. <a href="http://rubyquicktips.com/post/1018776470/embracing-functional-programming">One solution proposed by Bradley Grzesiak</a> demonstrates a particularly interesting use of reduce:</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<p>In his <a href="http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/">series on functional programming in Ruby</a>, Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. <a href="http://rubyquicktips.com/post/1018776470/embracing-functional-programming">One solution proposed by Bradley Grzesiak</a> demonstrates a particularly interesting use of <code>#reduce</code> (or, as in this case, <code>#inject</code>:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">module_name = "X::Y::Z"
-</span><span class="line">module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{memo[0]}::#{x}") }
-</span><span class="line">=&gt; ["X::Y::Z", "X::Y", "X"]</span></code></pre></td></tr></table></div></figure></notextile></div>
-
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">module_name</span> <span class="o">=</span> <span class="s2">&quot;X::Y::Z&quot;</span>
+</span><span class="line"><span class="n">module_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;::&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">memo</span><span class="p">,</span><span class="n">x</span><span class="o">|</span> <span class="n">memo</span><span class="o">.</span><span class="n">unshift</span><span class="p">(</span><span class="n">memo</span><span class="o">.</span><span class="n">empty?</span> <span class="p">?</span> <span class="n">x</span> <span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">memo</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="si">}</span><span class="s2">::</span><span class="si">#{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class="line"><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;X::Y::Z&quot;</span><span class="p">,</span> <span class="s2">&quot;X::Y&quot;</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>Let’s break this code down into separate steps.</p>
 
 <ol>
@@ -167,10 +163,10 @@
     <p>Mr. Grzesiak splits <code>module_name</code>, which is our starting string, into the array [“X”, “Y”, “Z”].</p>
   </li>
   <li>
-    <p>He then uses the <code>inject</code> using the <code>inject(initial)</code> syntax, which will initialize the accumulator, called <code>memo</code>, to an empty array.</p>
+    <p>He then uses <code>#inject</code> with the <code>inject(initial)</code> syntax, which will initialize the accumulator, called <code>memo</code>, to an empty array.</p>
   </li>
   <li>
-    <p>Now the iteration begins. If this new ‘memo’ array is empty, which will only happen on the first iteration of <code>inject</code>, <code>inject</code> adds that element (“X”) to the beginning of <code>memo</code> (using <code>unshift</code>). Otherwise, <code>inject</code> adds a string to <code>memo</code> containing the result of the previous iteration (“X”), the separator (“::”), and the current element (“Y”).</p>
+    <p>Now the iteration begins. If this new ‘memo’ array is empty, which will only happen on the first iteration of <code>#inject</code>, <code>#inject</code> adds that element (“X”) to the beginning of <code>memo</code> (using <code>Array#unshift</code>). Otherwise, <code>#inject</code> adds a string to <code>memo</code> containing the result of the previous iteration (“X”), the separator (“::”), and the current element (“Y”).</p>
   </li>
 </ol>
 
@@ -178,22 +174,79 @@
 
 <hr />
 
-<p>Haitham Mohammad put <code>transpose</code> <a href="http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce">through its paces</a> on <a href="http://rubyquicktips.com/">Ruby Quicktips</a>, the same site that gave us the above solution. <code>transpose</code>, <a href="http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose">according to the Ruby documentation</a>, “assumes that self is an array of arrays and transposes the rows and columns.” In other words, if you imagine an array of arrays as rows in a table, <code>transpose</code> will return the columns from that table.</p>
-
-<p>Mr. Mohammad then shows us how to get the sum of each column of table represented by an array of row arrays.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<p>The following is a chunk of code from the <a href="https://github.com/rails/rails/blob/master/actionmailer/lib/action_mailer/mail_helper.rb">MailHelper module of Rails 4.2.5’s ActionMailer module</a>.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
 <span class="line-number">5</span>
 <span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">a = [1, 2, 3]
-</span><span class="line">b = [4, 5, 6]
-</span><span class="line">c = [7, 8, 9]
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># Returns +text+ wrapped at +len+ columns and indented +indent+ spaces.</span>
+</span><span class="line"><span class="c1"># By default column length +len+ equals 72 characters and indent</span>
+</span><span class="line"><span class="c1"># +indent+ equal two spaces.</span>
+</span><span class="line"><span class="c1">#</span>
+</span><span class="line"><span class="c1">#   my_text = &#39;Here is a sample text with more than 40 characters&#39;</span>
+</span><span class="line"><span class="c1">#</span>
+</span><span class="line"><span class="c1">#   format_paragraph(my_text, 25, 4)</span>
+</span><span class="line"><span class="c1">#   # =&gt; &quot;    Here is a sample text with\n    more than 40 characters&quot;</span>
+</span><span class="line"><span class="k">def</span> <span class="nf">format_paragraph</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">72</span><span class="p">,</span> <span class="n">indent</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class="line">  <span class="n">sentences</span> <span class="o">=</span> <span class="o">[[]]</span>
 </span><span class="line">
-</span><span class="line">[a, b, c].transpose.map { |x| x.reduce :+ }
-</span><span class="line"># =&gt; [12, 15, 18]</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span><span class="line">  <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">word</span><span class="o">|</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">sentences</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">present?</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">sentences</span><span class="o">.</span><span class="n">last</span> <span class="o">+</span> <span class="o">[</span><span class="n">word</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="n">len</span>
+</span><span class="line">      <span class="n">sentences</span> <span class="o">&lt;&lt;</span> <span class="o">[</span><span class="n">word</span><span class="o">]</span>
+</span><span class="line">    <span class="k">else</span>
+</span><span class="line">      <span class="n">sentences</span><span class="o">.</span><span class="n">last</span> <span class="o">&lt;&lt;</span> <span class="n">word</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">indentation</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="n">indent</span>
+</span><span class="line">  <span class="n">sentences</span><span class="o">.</span><span class="n">map!</span> <span class="p">{</span> <span class="o">|</span><span class="n">sentence</span><span class="o">|</span>
+</span><span class="line">    <span class="s2">&quot;</span><span class="si">#{</span><span class="n">indentation</span><span class="si">}#{</span><span class="n">sentence</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class="line">  <span class="p">}</span><span class="o">.</span><span class="n">join</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>There’s nothing too remarkable about this method, but I’m going to break it down because it’s a good example of map in action. This code is proobably executing somewhere at this very moment.</p>
+
+<hr />
+
+<p>Haitham Mohammad put <code>#transpose</code> <a href="http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce">through its paces</a> on <a href="http://rubyquicktips.com/">Ruby Quicktips</a>, the same site that gave us the above solution. <code>#transpose</code>, <a href="http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose">according to the Ruby documentation</a>, “assumes that self is an array of arrays and transposes the rows and columns.” In other words, if you imagine an array of arrays as rows in a table, <code>#transpose</code> will return the columns from that table.</p>
+
+<p>Mr. Mohammad then shows us how to get the sum of each column of table represented by an array of row arrays.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">a</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span>
+</span><span class="line"><span class="n">b</span> <span class="o">=</span> <span class="o">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="o">]</span>
+</span><span class="line"><span class="n">c</span> <span class="o">=</span> <span class="o">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="o">]</span>
+</span><span class="line">
+</span><span class="line"><span class="o">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">].</span><span class="n">transpose</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">.</span><span class="n">reduce</span> <span class="ss">:+</span> <span class="p">}</span>
+</span><span class="line"><span class="c1"># =&gt; [12, 15, 18]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<hr />
+
+<p>So there’s a bit about <code>#map</code> and <code>#reduce</code>. There’s a lot more to discuss - for example, these methods can take lambdas, too! - but that’ll do for now. I love these guys.</p>
 
 <div class="footnotes">
   <ol>
