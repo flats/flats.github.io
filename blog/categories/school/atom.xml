@@ -4,7 +4,7 @@
   <title><![CDATA[Category: school | Basic Object]]></title>
   <link href="http://flats.github.io/blog/categories/school/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-08T16:25:25-05:00</updated>
+  <updated>2015-12-08T16:28:50-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -153,7 +153,7 @@ There’s nothing too remarkable about this method, but I’m going to break it 
 </span></code></pre></td></tr></table></div></figure>
 - - -</p>
 
-<p>So there’s a bit about <code>#map</code> and <code>#reduce</code>. There’s a lot more to discuss - for example, these methods can take lambdas, too! - but that’ll do for now. I love these guys.</p>
+<p>So there’s a bit about <code>#map</code> and <code>#reduce</code>. There’s a lot more to discuss - for example, these methods <a href="http://yeungda.com/2011/11/01/ruby-lambda-keyword.html">can take lambdas, too!</a> - but that’ll do for now. I love these guys.</p>
 
 <div class="footnotes">
   <ol>
