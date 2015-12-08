@@ -18,14 +18,14 @@ As [higher-order functions](https://en.wikipedia.org/wiki/Higher-order_function)
 
 The simplest use of `#reduce` is just `collection.reduce(initial_value, :name_of_method)`. For example,
 
-```
+```ruby
 array = [1, 2, 3, 4] # => [1, 2, 3, 4]
 array.reduce(0, :+) => 10
 ```
 
 calls the `#+` for each element in the array. The method that we specify (in this case, `#+`) has to be a binary method (a method called on one object with a single argument of another object), so we need a starting value, which we have in this case specified as 0. As we iterate through the array using reduce, this is what happens at each stage of the iteration:
 
-```
+```ruby
 # reduce sets up an accumulator variable, memo, and sets it to the initial
 # value, which is 0.
 memo = 0
@@ -41,7 +41,7 @@ memo.send(:+, 4) # => 10
 
 If you don't declare an initial value, the initial value will be the first element of the collection. There's also the option of passing a block instead of the name of a function, which would look like
 
-```
+```ruby
 array.reduce(0) { |sum, element| sum + element } # => 10
 ```
 
@@ -54,7 +54,7 @@ These functions are very powerful when used together. First, I'll look at a coup
 
 In his [series on functional programming in Ruby](http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/), Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. [One solution proposed by Bradley Grzesiak](http://rubyquicktips.com/post/1018776470/embracing-functional-programming) demonstrates a particularly interesting use of `#reduce` (or, as in this case, `#inject`:
 
-```
+```ruby
 module_name = "X::Y::Z"
 module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{memo[0]}::#{x}") }
 => ["X::Y::Z", "X::Y", "X"]
@@ -74,7 +74,7 @@ So, the final array is built backwards: ["X"], then ["X::Y", "X"], and then fina
 
 The following is a chunk of code from the [MailHelper module of Rails 4.2.5's ActionMailer module](https://github.com/rails/rails/blob/master/actionmailer/lib/action_mailer/mail_helper.rb).
 
-```
+```ruby
 # Returns +text+ wrapped at +len+ columns and indented +indent+ spaces.
 # By default column length +len+ equals 72 characters and indent
 # +indent+ equal two spaces.
@@ -109,7 +109,7 @@ Haitham Mohammad put `#transpose` [through its paces](http://rubyquicktips.com/p
 
 Mr. Mohammad then shows us how to get the sum of each column of table represented by an array of row arrays.
 
-```
+```ruby
 a = [1, 2, 3]
 b = [4, 5, 6]
 c = [7, 8, 9]
