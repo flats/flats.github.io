@@ -108,8 +108,6 @@ c = [7, 8, 9]
 ```
 - - -
 
-So there's a bit about `#map` and `#reduce`. There's a lot more to discuss - for example, these methods can take lambdas, too! - but that'll do for now. I love these guys.
+So there's a bit about `#map` and `#reduce`. There's a lot more to discuss - for example, these methods [can take lambdas, too!](http://yeungda.com/2011/11/01/ruby-lambda-keyword.html) - but that'll do for now. I love these guys.
 
 [^1]: [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm.
-
-[^2]: Credit to [David Yeung's blog](http://yeungda.com/2011/11/01/ruby-lambda-keyword.html) for examples of using higher-order functions with lambdas.
