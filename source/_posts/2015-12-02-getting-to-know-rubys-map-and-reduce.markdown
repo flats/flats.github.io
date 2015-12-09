@@ -46,7 +46,7 @@ Some Interesting Map and Reduce Examples
 
 These functions are very powerful when used together. First, I'll look at a couple of examples of using `#map` and `#reduce` on their own, and then I'll get into an example of using reduce chained on to the end of map.
 
-In his [series on functional programming in Ruby](http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/), Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module path in a particular way. [One solution proposed by Bradley Grzesiak](http://rubyquicktips.com/post/1018776470/embracing-functional-programming) demonstrates a particularly interesting use of `#reduce` (or, as in this case, `#inject`:
+In his [series on functional programming in Ruby](http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/), Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module name in a particular way.[^2] [One solution proposed by Bradley Grzesiak](http://rubyquicktips.com/post/1018776470/embracing-functional-programming) demonstrates a particularly interesting use of `#reduce` (or, as in this case, `#inject`:
 ```ruby
 module_name = "X::Y::Z"
 module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{memo[0]}::#{x}") }
@@ -91,7 +91,7 @@ def format_paragraph(text, len = 72, indent = 2)
   }.join "\n"
 end
 ```
-There's nothing too remarkable about this method, but I'm going to break it down because it's a good example of map in action. This code is proobably executing somewhere at this very moment.
+There's nothing too remarkable about this method, but I'm going to break it down because it's a good example of `#map` in some very widely used code. This code is proobably executing somewhere at this very moment.
 
 - - -
 
@@ -111,3 +111,5 @@ c = [7, 8, 9]
 So there's a bit about `#map` and `#reduce`. There's a lot more to discuss - for example, these methods [can take lambdas, too!](http://yeungda.com/2011/11/01/ruby-lambda-keyword.html) - but that'll do for now. I love these guys.
 
 [^1]: [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm.
+
+[^2]: I'm curious why wycats was working on this. Obviously, he's starting with a call to a class/module member and wants to build an array of strings that starts with the original call and then then builds a call to the parent class/module in each successive element. If anyone has some insight into context for this problem, [let me know](mailto:david.flaherty@flatironschool.com).
