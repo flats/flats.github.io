@@ -58,7 +58,7 @@ module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{
 ```
 Let's break this not-quite-recursive code down into separate steps.
 
-1. Mr. Grzesiak splits `module_name`, which is our starting string, into the array ["X", "Y", "Z"].
+1. Mr. Grzesiak splits `module_name`, which is our starting string, on the scope resolution operator into the array ["X", "Y", "Z"].
 
 2. He then uses `#inject` with the `inject(initial)` syntax, which will initialize the accumulator, called `memo`, to an empty array.
 
@@ -127,4 +127,4 @@ I love these guys.
 
 [^2]: Enumerators are a large topic in and of themselves - for more information, see the [Ruby documentation](http://ruby-doc.org/core-2.2.0/Enumerator.html).
 
-[^3]: I'm curious as to why wycats was working on this. Obviously this has something to do with breaking down the parsing of a class or module, but why? If anyone has some insight into context for this problem, [let me know](mailto:david.flaherty@flatironschool.com).
+[^3]: I'm curious as to the exact context for this problem. Obviously this has something to do with parsing a call to a class or module that uses the scope resolution operator, but if anyone has any more detils, [let me know](mailto:david.flaherty@flatironschool.com).
