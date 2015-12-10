@@ -4,7 +4,7 @@
   <title><![CDATA[Category: school | Basic Object]]></title>
   <link href="http://flats.github.io/blog/categories/school/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-10T12:22:34-05:00</updated>
+  <updated>2015-12-10T13:48:33-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -160,12 +160,11 @@ There’s nothing too remarkable about this method and its use of map, but I’m
 </span><span class='line'>
 </span><span class='line'><span class="sr">&lt;p&gt;[a, b, c].transpose.map { |x| x.reduce :+ }</span>
 </span><span class='line'><span class="sr"># =&amp;gt; [12, 15, 18]</span>
-</span></code></pre></td></tr></table></div></figure>
-- - -</p>
-
-<p>So there’s a bit about <code>#map</code> and <code>#reduce</code>. There’s a lot more to discuss - for example, these methods <a href="http://yeungda.com/2011/11/01/ruby-lambda-keyword.html">can take lambdas, too!</a> - but this is already a very long post.</p>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <hr />
+
+<p>So there’s a bit about <code>#map</code> and <code>#reduce</code>. There’s a lot more to discuss - for example, these methods <a href="http://yeungda.com/2011/11/01/ruby-lambda-keyword.html">can take lambdas, too!</a> - but this is already a very long post.</p>
 
 <p>I love these guys.</p>
 
