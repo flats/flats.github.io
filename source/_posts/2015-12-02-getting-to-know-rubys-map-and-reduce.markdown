@@ -14,7 +14,7 @@ As [higher-order functions](https://en.wikipedia.org/wiki/Higher-order_function)
 
 `#map` (or `#collect`) returns an array containing the results of calling the supplied block on each element of the enumerable. In other words, map allows you to apply a function to every element of a data structure and receive the result.
 
-
+`#map` is usually called with a block, as in `collection.map { |element| element + 1 }`. If `collection = [1, 2, 3, 4]`, this will return `[2, 3, 4, 5]`. As with many other methods from the Enumerator module, if `#map` is called without a block, it will return an Enumerator.[^2]
 
 `#reduce` (or `#inject`) returns a value that is the result of applying a binary operation to the return value of applying the supplied block to each element of the enumerable. Whoa. What a mouthful. In other words, `#reduce` "reduces" each element of an enumerable to a single value, accumulates that value in a single variable, and then returns the value of the accumulator. Some functional languages, such Scheme and OCaml, refer to this function as `fold`.
 
@@ -48,7 +48,7 @@ Some Interesting Map and Reduce Examples
 
 These functions are very powerful when used together. First, I'll look at a couple of examples of using `#map` and `#reduce` on their own, and then I'll get into an example of using reduce chained on to the end of map.
 
-In his [series on functional programming in Ruby](http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/), Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module name in a particular way.[^2] [One solution proposed by Bradley Grzesiak](http://rubyquicktips.com/post/1018776470/embracing-functional-programming) demonstrates a particularly interesting use of `#reduce` (or, as in this case, `#inject`:
+In his [series on functional programming in Ruby](http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/), Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module name in a particular way.[^3] [One solution proposed by Bradley Grzesiak](http://rubyquicktips.com/post/1018776470/embracing-functional-programming) demonstrates a particularly interesting use of `#reduce` (or, as in this case, `#inject`:
 ```ruby
 module_name = "X::Y::Z"
 module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{memo[0]}::#{x}") }
@@ -116,8 +116,12 @@ c = [7, 8, 9]
 ```
 - - -
 
-So there's a bit about `#map` and `#reduce`. There's a lot more to discuss - for example, these methods [can take lambdas, too!](http://yeungda.com/2011/11/01/ruby-lambda-keyword.html) - but that'll do for now. I love these guys.
+So there's a bit about `#map` and `#reduce`. There's a lot more to discuss - for example, these methods [can take lambdas, too!](http://yeungda.com/2011/11/01/ruby-lambda-keyword.html) - but this is already a very long post.
+
+I love these guys.
 
 [^1]: [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm.
 
-[^2]: I'm curious as to why wycats was working on this. Obviously this has something to do with parsing calls to a class or module, but why? If anyone has some insight into context for this problem, [let me know](mailto:david.flaherty@flatironschool.com).
+[^2]: Enumerators are a large topic in and of themselves - for more information, see the [Ruby documentation](http://ruby-doc.org/core-2.2.0/Enumerator.html).
+
+[^3]: I'm curious as to why wycats was working on this. Obviously this has something to do with breaking down the parsing of a class or module, but why? If anyone has some insight into context for this problem, [let me know](mailto:david.flaherty@flatironschool.com).
