@@ -48,7 +48,7 @@ Some Interesting Map and Reduce Examples
 
 These functions are very powerful when used together. First, I'll look at a couple of examples of using `#map` and `#reduce` on their own, and then I'll get into an example of using reduce chained on to the end of map.
 
-### Reduce as a Recursion Alternative ###
+### Reduce as an Alternative to Recursion ###
 
 In his [series on functional programming in Ruby](http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/), Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module name in a particular way.[^3] [One solution proposed by Bradley Grzesiak](http://rubyquicktips.com/post/1018776470/embracing-functional-programming) demonstrates a particularly interesting use of `#reduce` (or, as in this case, `#inject`:
 ```ruby
