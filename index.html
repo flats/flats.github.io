@@ -164,7 +164,7 @@
 
 <ol>
   <li>
-    <p>Mr. Grzesiak splits <code>module_name</code>, which is our starting string, into the array [“X”, “Y”, “Z”].</p>
+    <p>Mr. Grzesiak splits <code>module_name</code>, which is our starting string, on the scope resolution operator into the array [“X”, “Y”, “Z”].</p>
   </li>
   <li>
     <p>He then uses <code>#inject</code> with the <code>inject(initial)</code> syntax, which will initialize the accumulator, called <code>memo</code>, to an empty array.</p>
@@ -270,7 +270,7 @@
       <p>Enumerators are a large topic in and of themselves - for more information, see the <a href="http://ruby-doc.org/core-2.2.0/Enumerator.html">Ruby documentation</a>. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
     </li>
     <li id="fn:3">
-      <p>I’m curious as to why wycats was working on this. Obviously this has something to do with breaking down the parsing of a class or module, but why? If anyone has some insight into context for this problem, <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#100;&#097;&#118;&#105;&#100;&#046;&#102;&#108;&#097;&#104;&#101;&#114;&#116;&#121;&#064;&#102;&#108;&#097;&#116;&#105;&#114;&#111;&#110;&#115;&#099;&#104;&#111;&#111;&#108;&#046;&#099;&#111;&#109;">let me know</a>. <a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
+      <p>I’m curious as to the exact context for this problem. Obviously this has something to do with parsing a call to a class or module that uses the scope resolution operator, but if anyone has any more detils, <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#100;&#097;&#118;&#105;&#100;&#046;&#102;&#108;&#097;&#104;&#101;&#114;&#116;&#121;&#064;&#102;&#108;&#097;&#116;&#105;&#114;&#111;&#110;&#115;&#099;&#104;&#111;&#111;&#108;&#046;&#099;&#111;&#109;">let me know</a>. <a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>
