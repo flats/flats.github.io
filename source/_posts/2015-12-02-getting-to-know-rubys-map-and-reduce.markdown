@@ -14,6 +14,8 @@ As [higher-order functions](https://en.wikipedia.org/wiki/Higher-order_function)
 
 `#map` (or `#collect`) returns an array containing the results of calling the supplied block on each element of the enumerable. In other words, map allows you to apply a function to every element of a data structure and receive the result.
 
+
+
 `#reduce` (or `#inject`) returns a value that is the result of applying a binary operation to the return value of applying the supplied block to each element of the enumerable. Whoa. What a mouthful. In other words, `#reduce` "reduces" each element of an enumerable to a single value, accumulates that value in a single variable, and then returns the value of the accumulator. Some functional languages, such Scheme and OCaml, refer to this function as `fold`.
 
 The simplest use of `#reduce` is just `collection.reduce(initial_value, :name_of_method)`. For example,
@@ -52,7 +54,7 @@ module_name = "X::Y::Z"
 module_name.split('::').inject([]) { |memo,x| memo.unshift(memo.empty? ? x : "#{memo[0]}::#{x}") }
 => ["X::Y::Z", "X::Y", "X"]
 ```
-Let's break this code down into separate steps.
+Let's break this not-quite-recursive code down into separate steps.
 
 1. Mr. Grzesiak splits `module_name`, which is our starting string, into the array ["X", "Y", "Z"].
 
@@ -60,7 +62,7 @@ Let's break this code down into separate steps.
 
 3. Now the iteration begins. If this new 'memo' array is empty, which will only happen on the first iteration of `#inject`, `#inject` adds that element ("X") to the beginning of `memo` (using `Array#unshift`). Otherwise, `#inject` adds a string to `memo` containing the result of the previous iteration ("X"), the separator ("::"), and the current element ("Y").
 
-So, the final array is built backwards: ["X"], then ["X::Y", "X"], and then finally ["X::Y::Z", "X::Y", "X"]. Nifty.
+So, the final array is built backwards: ["X"], then ["X::Y", "X"], and then finally ["X::Y::Z", "X::Y", "X"]. Nifty. There is certainly a recursive solution to this problem, but this is a great example of how higher-order functions can be used as an alternative to recursion.
 
 - - -
 
@@ -91,7 +93,13 @@ def format_paragraph(text, len = 72, indent = 2)
   }.join "\n"
 end
 ```
-There's nothing too remarkable about this method, but I'm going to break it down because it's a good example of `#map` in some very widely used code. This code is proobably executing somewhere at this very moment.
+There's nothing too remarkable about this method and its use of map, but I'm going to break it down because it's a good example of `#map` in some very widely used code. This code is proobably executing somewhere at this very moment.
+
+As the comment says, this method `format_paragraph` takes a chunk of text that needs formatting, a line length that defaults to 72, and an indent length (in spaces) that defatuls to 2. There are two steps to this process: first break the text into lines, and then indent each line by the specified indent size.
+
+In the first step, our function creates an array of arrays `sentences`, each array of which comprises the strings that make up each line. The combined character count of the words in each of these nested arrays is not greater than the specified line length (`len`).
+
+The second step is where we use map to add the proper indentation to each line. After building up the indentation as a string of whitespace using `String#*`, our function mutates the array of line arrays by using `#map!` to join the words with a space (rebuild then sentence) and prepend the indentation spaces. Then the lines are all joined with line breaks. Now we have a formatted paragraph.
 
 - - -
 
@@ -112,4 +120,4 @@ So there's a bit about `#map` and `#reduce`. There's a lot more to discuss - for
 
 [^1]: [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm.
 
-[^2]: I'm curious as to why wycats was working on this. Obviously, he's starting with a call to a class/module member and wants to build an array of strings that starts with the original call and then then builds a call to the parent class/module in each successive element. If anyone has some insight into context for this problem, [let me know](mailto:david.flaherty@flatironschool.com).
+[^2]: I'm curious as to why wycats was working on this. Obviously this has something to do with parsing calls to a class or module, but why? If anyone has some insight into context for this problem, [let me know](mailto:david.flaherty@flatironschool.com).
