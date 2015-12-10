@@ -116,11 +116,10 @@ c = [7, 8, 9]
 [a, b, c].transpose.map { |x| x.reduce :+ }
 # => [12, 15, 18]
 ```
+
 - - -
 
 So there's a bit about `#map` and `#reduce`. There's a lot more to discuss - for example, these methods [can take lambdas, too!](http://yeungda.com/2011/11/01/ruby-lambda-keyword.html) - but this is already a very long post.
-
-- - -
 
 I love these guys.
 
