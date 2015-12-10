@@ -48,6 +48,8 @@ Some Interesting Map and Reduce Examples
 
 These functions are very powerful when used together. First, I'll look at a couple of examples of using `#map` and `#reduce` on their own, and then I'll get into an example of using reduce chained on to the end of map.
 
+### Reduce as a Recursion Alternative ###
+
 In his [series on functional programming in Ruby](http://www.sitepoint.com/functional-programming-techniques-with-ruby-part-i/), Nathan Kleyn mentions a question that Yehuda Katz asked several years ago about splitting a module name in a particular way.[^3] [One solution proposed by Bradley Grzesiak](http://rubyquicktips.com/post/1018776470/embracing-functional-programming) demonstrates a particularly interesting use of `#reduce` (or, as in this case, `#inject`:
 ```ruby
 module_name = "X::Y::Z"
@@ -64,7 +66,7 @@ Let's break this not-quite-recursive code down into separate steps.
 
 So, the final array is built backwards: ["X"], then ["X::Y", "X"], and then finally ["X::Y::Z", "X::Y", "X"]. Nifty. There is certainly a recursive solution to this problem, but this is a great example of how higher-order functions can be used as an alternative to recursion.
 
-- - -
+### Map Arrays of Strings ###
 
 The following is a chunk of code from the [MailHelper module of Rails 4.2.5's ActionMailer module](https://github.com/rails/rails/blob/master/actionmailer/lib/action_mailer/mail_helper.rb).
 ```ruby
@@ -101,7 +103,7 @@ In the first step, our function creates an array of arrays `sentences`, each arr
 
 The second step is where we use map to add the proper indentation to each line. After building up the indentation as a string of whitespace using `String#*`, our function mutates the array of line arrays by using `#map!` to join the words with a space (rebuild then sentence) and prepend the indentation spaces. Then the lines are all joined with line breaks. Now we have a formatted paragraph.
 
-- - -
+### Map and Reduce in Tandem ###
 
 Haitham Mohammad put `#transpose` [through its paces](http://rubyquicktips.com/post/18842314838/some-array-magic-using-transpose-map-and-reduce) on [Ruby Quicktips](http://rubyquicktips.com/), the same site that gave us the above solution. `#transpose`, [according to the Ruby documentation](http://ruby-doc.org/core-2.2.0/Array.html#method-i-transpose), "assumes that self is an array of arrays and transposes the rows and columns." In other words, if you imagine an array of arrays as rows in a table, `#transpose` will return the columns from that table.
 
@@ -117,6 +119,8 @@ c = [7, 8, 9]
 - - -
 
 So there's a bit about `#map` and `#reduce`. There's a lot more to discuss - for example, these methods [can take lambdas, too!](http://yeungda.com/2011/11/01/ruby-lambda-keyword.html) - but this is already a very long post.
+
+- - -
 
 I love these guys.
 
