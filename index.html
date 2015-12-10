@@ -156,7 +156,7 @@
 </span><span class="line"><span class="n">module_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;::&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="o">[]</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">memo</span><span class="p">,</span><span class="n">x</span><span class="o">|</span> <span class="n">memo</span><span class="o">.</span><span class="n">unshift</span><span class="p">(</span><span class="n">memo</span><span class="o">.</span><span class="n">empty?</span> <span class="p">?</span> <span class="n">x</span> <span class="p">:</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">memo</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="si">}</span><span class="s2">::</span><span class="si">#{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="p">}</span>
 </span><span class="line"><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;X::Y::Z&quot;</span><span class="p">,</span> <span class="s2">&quot;X::Y&quot;</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="o">]</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Let’s break this code down into separate steps.</p>
+<p>Let’s break this not-quite-recursive code down into separate steps.</p>
 
 <ol>
   <li>
@@ -170,7 +170,7 @@
   </li>
 </ol>
 
-<p>So, the final array is built backwards: [“X”], then [“X::Y”, “X”], and then finally [“X::Y::Z”, “X::Y”, “X”]. Nifty.</p>
+<p>So, the final array is built backwards: [“X”], then [“X::Y”, “X”], and then finally [“X::Y::Z”, “X::Y”, “X”]. Nifty. There is certainly a recursive solution to this problem, but this is a great example of how higher-order functions can be used as an alternative to recursion.</p>
 
 <hr />
 
@@ -224,7 +224,13 @@
 </span><span class="line">  <span class="p">}</span><span class="o">.</span><span class="n">join</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
 </span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>There’s nothing too remarkable about this method, but I’m going to break it down because it’s a good example of <code>#map</code> in some very widely used code. This code is proobably executing somewhere at this very moment.</p>
+<p>There’s nothing too remarkable about this method and its use of map, but I’m going to break it down because it’s a good example of <code>#map</code> in some very widely used code. This code is proobably executing somewhere at this very moment.</p>
+
+<p>As the comment says, this method <code>format_paragraph</code> takes a chunk of text that needs formatting, a line length that defaults to 72, and an indent length (in spaces) that defatuls to 2. There are two steps to this process: first break the text into lines, and then indent each line by the specified indent size.</p>
+
+<p>In the first step, our function creates an array of arrays <code>sentences</code>, each array of which comprises the strings that make up each line. The combined character count of the words in each of these nested arrays is not greater than the specified line length (<code>len</code>).</p>
+
+<p>The second step is where we use map to add the proper indentation to each line. After building up the indentation as a string of whitespace using <code>String#*</code>, our function mutates the array of line arrays by using <code>#map!</code> to join the words with a space (rebuild then sentence) and prepend the indentation spaces. Then the lines are all joined with line breaks. Now we have a formatted paragraph.</p>
 
 <hr />
 
@@ -254,7 +260,7 @@
       <p><a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>, one of the oldest high-level programming languages, pioneered the use of higher-order functions. While it supports several different programming paradigms, Lisp and its most popular dialects, Common Lisp and Scheme, are most commonly used to program in the functional programming paradigm. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
     <li id="fn:2">
-      <p>I’m curious as to why wycats was working on this. Obviously, he’s starting with a call to a class/module member and wants to build an array of strings that starts with the original call and then then builds a call to the parent class/module in each successive element. If anyone has some insight into context for this problem, <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#100;&#097;&#118;&#105;&#100;&#046;&#102;&#108;&#097;&#104;&#101;&#114;&#116;&#121;&#064;&#102;&#108;&#097;&#116;&#105;&#114;&#111;&#110;&#115;&#099;&#104;&#111;&#111;&#108;&#046;&#099;&#111;&#109;">let me know</a>. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+      <p>I’m curious as to why wycats was working on this. Obviously this has something to do with parsing calls to a class or module, but why? If anyone has some insight into context for this problem, <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#100;&#097;&#118;&#105;&#100;&#046;&#102;&#108;&#097;&#104;&#101;&#114;&#116;&#121;&#064;&#102;&#108;&#097;&#116;&#105;&#114;&#111;&#110;&#115;&#099;&#104;&#111;&#111;&#108;&#046;&#099;&#111;&#109;">let me know</a>. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>
