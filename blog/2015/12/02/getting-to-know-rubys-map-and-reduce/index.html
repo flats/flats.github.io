@@ -137,11 +137,13 @@
 </span><span class="line"><span class="c1"># of this is the return value for reduce.</span>
 </span><span class="line"><span class="n">memo</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:+</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1"># =&gt; 10</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>If you don’t declare an initial value, the initial value will be the first element of the collection. There’s also the option of passing a block instead of the name of a function, which would look like</p>
+<p>There’s also the option of passing a block instead of the name of a function, which would look like</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">array</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">sum</span><span class="p">,</span> <span class="n">element</span><span class="o">|</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">element</span> <span class="p">}</span> <span class="c1"># =&gt; 10</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>for the example above.</p>
+
+<p>If you don’t declare an initial value, the initial value will be the first element of the collection. This is <em>very</em> important! If, for example, you have an array of object and you’re using <code>#reduce</code> to get the sum of a particular attribute, leaving out an initial value will lead to strange and undesirable result.</p>
 
 <h1 id="some-interesting-map-and-reduce-examples">Some Interesting Map and Reduce Examples</h1>
 
@@ -317,6 +319,8 @@
     <p class="meta">
       
       
+        <a class="basic-alignment right" href="/blog/2015/12/10/closures-yield-and-the-enumerable-module/" title="Next Post: Closures, Yield, and the Enumerable Module">Closures, Yield, and the Enumerable Module &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -328,6 +332,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/12/10/closures-yield-and-the-enumerable-module/">Closures, Yield, and the Enumerable Module</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/12/02/getting-to-know-rubys-map-and-reduce/">Getting to Know Ruby's Map and Reduce</a>

@@ -9,7 +9,7 @@
   <meta name="author" content="D. Flaherty">
 
   
-  <meta name="description" content="The #map and #reduce functions are most closely associated with functional programming.1 Even so, Ruby, the object-oriented-est of all object- &hellip;">
+  <meta name="description" content="I tried to make a class Enumerable by dynamically mixing in the Enumerable module and defining #each, and I failed. This is my story. I was bored and &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,66 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+  
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/10/closures-yield-and-the-enumerable-module/">Closures, Yield, and the Enumerable Module</a></h1>
+      
+      
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-10T18:08:24-05:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I tried to make a class Enumerable by dynamically mixing in the Enumerable module and defining <code>#each</code>, and I failed. This is my story.</p>
+
+<hr />
+
+<p>I was bored and I was messing around with mixing in modules. Yep, that’s boredom. Anyway, one of the most useful modules in Ruby is the Enumerable module. It’s a total badass. So I wanted to add the</p>
+
+<p>There are a couple of ways to define a class method outside of a class definition. The most obvious way to do it is to use dot syntax:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">def</span> <span class="nc">MyClass</span><span class="o">.</span><span class="nf">my_method</span>
+</span><span class="line">  <span class="s2">&quot;Thanks for stopping by my_method.&quot;</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>What’s actually happening here is that we’re defining a singleton method for the class object called MyClass.</p>
+
+<p>Alas, you can’t use <code>#define_method</code> to define a class method - it can only define instance methods.</p>
+
+<p>```</p>
+
+<p>http://yehudakatz.com/2009/11/15/metaprogramming-in-ruby-its-all-about-the-self/</p>
+
+<p>https://banisterfiend.wordpress.com/2010/11/06/behavior-of-yield-in-define_method/</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -140,11 +200,13 @@
 </span><span class="line"><span class="c1"># of this is the return value for reduce.</span>
 </span><span class="line"><span class="n">memo</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:+</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1"># =&gt; 10</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>If you don’t declare an initial value, the initial value will be the first element of the collection. There’s also the option of passing a block instead of the name of a function, which would look like</p>
+<p>There’s also the option of passing a block instead of the name of a function, which would look like</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">array</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">sum</span><span class="p">,</span> <span class="n">element</span><span class="o">|</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">element</span> <span class="p">}</span> <span class="c1"># =&gt; 10</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>for the example above.</p>
+
+<p>If you don’t declare an initial value, the initial value will be the first element of the collection. This is <em>very</em> important! If, for example, you have an array of object and you’re using <code>#reduce</code> to get the sum of a particular attribute, leaving out an initial value will lead to strange and undesirable result.</p>
 
 <h1 id="some-interesting-map-and-reduce-examples">Some Interesting Map and Reduce Examples</h1>
 
@@ -292,6 +354,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/12/10/closures-yield-and-the-enumerable-module/">Closures, Yield, and the Enumerable Module</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/12/02/getting-to-know-rubys-map-and-reduce/">Getting to Know Ruby's Map and Reduce</a>

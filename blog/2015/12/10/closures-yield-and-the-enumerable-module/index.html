@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: school - Basic Object</title>
+  <title>Closures, Yield, and the Enumerable Module - Basic Object</title>
   <meta name="author" content="D. Flaherty">
 
   
-  <meta name="description" content="Category: school">
+  <meta name="description" content="I tried to make a class Enumerable by dynamically mixing in the Enumerable module and defining #each, and I failed. This is my story. I was bored and &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://flats.github.io/blog/categories/school">
+  <link rel="canonical" href="http://flats.github.io/blog/2015/12/10/closures-yield-and-the-enumerable-module">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Basic Object" type="application/atom+xml">
@@ -66,30 +66,102 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: School</h1>
+  
+    
+      <h1 class="entry-title">Closures, Yield, and the Enumerable Module</h1>
+    
+  
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-10T18:08:24-05:00" pubdate data-updated="true"></time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>I tried to make a class Enumerable by dynamically mixing in the Enumerable module and defining <code>#each</code>, and I failed. This is my story.</p>
 
-  
-  <h2>2015</h2>
+<hr />
 
-<article>
-  
-<h1><a href="/blog/2015/12/02/getting-to-know-rubys-map-and-reduce/">Getting to Know Ruby's Map and Reduce</a></h1>
-<time datetime="2015-12-02T21:27:10-05:00" pubdate><span class='month'>December</span> <span class='day'>02</span> <span class='year'>2015</span></time>
+<p>I was bored and I was messing around with mixing in modules. Yep, that’s boredom. Anyway, one of the most useful modules in Ruby is the Enumerable module. It’s a total badass. So I wanted to add the</p>
 
-</article>
+<p>There are a couple of ways to define a class method outside of a class definition. The most obvious way to do it is to use dot syntax:</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">def</span> <span class="nc">MyClass</span><span class="o">.</span><span class="nf">my_method</span>
+</span><span class="line">  <span class="s2">&quot;Thanks for stopping by my_method.&quot;</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>What’s actually happening here is that we’re defining a singleton method for the class object called MyClass.</p>
 
+<p>Alas, you can’t use <code>#define_method</code> to define a class method - it can only define instance methods.</p>
+
+<p>```</p>
+
+<p>http://yehudakatz.com/2009/11/15/metaprogramming-in-ruby-its-all-about-the-self/</p>
+
+<p>https://banisterfiend.wordpress.com/2010/11/06/behavior-of-yield-in-define_method/</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">D. Flaherty</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-12-10T18:08:24-05:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://flats.github.io/blog/2015/12/10/closures-yield-and-the-enumerable-module/" data-via="" data-counturl="http://flats.github.io/blog/2015/12/10/closures-yield-and-the-enumerable-module/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/02/getting-to-know-rubys-map-and-reduce/" title="Previous Post: Getting to Know Ruby's Map and Reduce">&laquo; Getting to Know Ruby's Map and Reduce</a>
+      
+      
+    </p>
+  </footer>
 </article>
 
 </div>
