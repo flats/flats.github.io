@@ -37,11 +37,13 @@ memo.send(:+, 3) # => 6
 # of this is the return value for reduce.
 memo.send(:+, 4) # => 10
 ```
-If you don't declare an initial value, the initial value will be the first element of the collection. There's also the option of passing a block instead of the name of a function, which would look like
+There's also the option of passing a block instead of the name of a function, which would look like
 ```ruby
 array.reduce(0) { |sum, element| sum + element } # => 10
 ```
 for the example above.
+
+If you don't declare an initial value, the initial value will be the first element of the collection. This is *very* important! If, for example, you have an array of object and you're using `#reduce` to get the sum of a particular attribute, leaving out an initial value will lead to strange and undesirable result. 
 
 Some Interesting Map and Reduce Examples
 ========================================
