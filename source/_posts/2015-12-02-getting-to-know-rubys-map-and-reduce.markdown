@@ -43,7 +43,7 @@ array.reduce(0) { |sum, element| sum + element } # => 10
 ```
 for the example above.
 
-If you don't declare an initial value, the initial value will be the first element of the collection. This is *very* important! If, for example, you have an array of object and you're using `#reduce` to get the sum of a particular attribute, leaving out an initial value will lead to strange and undesirable result. 
+If you don't declare an initial value, the initial value will be the first element of the collection. This is *very* important! If, for example, you have an array of objects and you're using `#reduce` to get the sum of an attribute, leaving out an initial value will lead to strange and undesirable results. 
 
 Some Interesting Map and Reduce Examples
 ========================================
