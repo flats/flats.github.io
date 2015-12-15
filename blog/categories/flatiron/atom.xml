@@ -4,7 +4,7 @@
   <title><![CDATA[Category: flatiron | Basic Object]]></title>
   <link href="http://flats.github.io/blog/categories/flatiron/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-15T01:55:05-05:00</updated>
+  <updated>2015-12-15T01:56:23-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -55,7 +55,7 @@ array.reduce(0) { |sum, element| sum + element } # =&gt; 10
 </code>
 for the example above.</p>
 
-<p>If you don’t declare an initial value, the initial value will be the first element of the collection. This is <em>very</em> important! If, for example, you have an array of object and you’re using <code>#reduce</code> to get the sum of a particular attribute, leaving out an initial value will lead to strange and undesirable result.</p>
+<p>If you don’t declare an initial value, the initial value will be the first element of the collection. This is <em>very</em> important! If, for example, you have an array of objects and you’re using <code>#reduce</code> to get the sum of an attribute, leaving out an initial value will lead to strange and undesirable results.</p>
 
 <h1 id="some-interesting-map-and-reduce-examples">Some Interesting Map and Reduce Examples</h1>
 
