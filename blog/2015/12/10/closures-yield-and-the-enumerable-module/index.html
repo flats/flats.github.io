@@ -9,7 +9,7 @@
   <meta name="author" content="D. Flaherty">
 
   
-  <meta name="description" content="I tried to make a class Enumerable by dynamically mixing in the Enumerable module and defining #each, and I failed. This is my story. I was bored and &hellip;">
+  <meta name="description" content="I tried to make a class Enumerable by dynamically mixing in the Enumerable module and defining #each after declaring the class. I failed. This is my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,11 +95,25 @@
   </header>
 
 
-<div class="entry-content"><p>I tried to make a class Enumerable by dynamically mixing in the Enumerable module and defining <code>#each</code>, and I failed. This is my story.</p>
+<div class="entry-content"><p>I tried to make a class Enumerable by dynamically mixing in the Enumerable module and defining <code>#each</code> after declaring the class. I failed. This is my story.</p>
 
 <hr />
 
-<p>I was bored and I was messing around with mixing in modules. Yep, that’s boredom. Anyway, one of the most useful modules in Ruby is the Enumerable module. It’s a total badass. So I wanted to add the</p>
+<p>I was messing around with dynamically mixing in Ruby modules. Yep, I was pretty bored. Anyway, one of the most useful modules in Ruby is the Enumerable module. It’s a total badass. So I thought I’d try adding Enumerable to a class that I had already defined and see if that worked out.</p>
+
+<p>The first step is including it dynamically. Maybe I can just call the include method on my class!</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="no">MyClass</span><span class="o">.</span><span class="n">include</span><span class="p">(</span><span class="no">Enumerable</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Okay! That appears to work. No exceptions. Now let’s use it. I’ll try out using <code>#reduce</code>, one of my favorite higher-order functions in Ruby.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">my_thing</span> <span class="o">=</span> <span class="no">MyClass</span><span class="o">.</span><span class="n">new</span>
+</span><span class="line"><span class="n">my_thing</span><span class="o">.</span><span class="n">reduce</span> <span class="p">{</span> <span class="o">|</span><span class="n">thing</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">thing</span> <span class="p">}</span> <span class="c1"># =&gt; NoMethodError: undefined method `each&#39; for #&lt;MyClass:0x007fe59c0e3588&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Oops. Right. In order to take advantage of the Enumerable module, you need to include the module and <a href="http://www.rubydoc.info/stdlib/core/2.2.2/Enumerable">also define</a> an <code>#each</code> method.[^1] This makes a lot of sense - how can your class be enumerable in there’s nothing to enumerate?</p>
+
+<p>Fine, let’s do that. I could just define it in my class definition and be done with it, but I’m having fun working with dynamically modifying classes, so I want to keep going with this.</p>
 
 <p>There are a couple of ways to define a class method outside of a class definition. The most obvious way to do it is to use dot syntax:</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -109,7 +123,7 @@
 </span><span class="line">  <span class="s2">&quot;Thanks for stopping by my_method.&quot;</span>
 </span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>What’s actually happening here is that we’re defining a singleton method for the class object called MyClass.</p>
+<p>What’s actually happening here, and what’s happening every time you define a class method, is that we’re defining a singleton method for the class object called MyClass. Every class has a metaclass that holds all of its singleton methods, and MyClass’s metaclass now has the method <code>#my_method</code>.</p>
 
 <p>Alas, you can’t use <code>#define_method</code> to define a class method - it can only define instance methods.</p>
 
@@ -118,6 +132,8 @@
 <p>http://yehudakatz.com/2009/11/15/metaprogramming-in-ruby-its-all-about-the-self/</p>
 
 <p>https://banisterfiend.wordpress.com/2010/11/06/behavior-of-yield-in-define_method/</p>
+
+<p>[^1] Also note that (from the Ruby documentation) “If <code>Enumerable#max</code>, <code>#min</code>, or <code>#sort</code> is used, the objects in the collection must also implement a meaningful <code>&lt;=&gt;</code> operator, as these methods rely on an ordering between members of the collection.”</p>
 </div>
 
 
