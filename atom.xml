@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-17T15:21:08-05:00</updated>
+  <updated>2015-12-17T16:00:11-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -90,7 +90,7 @@
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>What? No block given? I definitely just passed in a block. What went wrong?</p>
 
-<p>This is where we get into the hairy business of Ruby’s closures. Closures are a bit of a strange concept, especially in the context of object-oriented programming, in which we rely on objects for pretty much everything. Still, it’s worth knowing about closures, Ruby has them, and understanding them will help you in certain other functional or functional hybrid languages, such as JavaScript. Alan Skorkin has (a nice, succinct definition of closures on his blog](http://www.skorks.com/2010/05/closures-a-simple-explanation-using-ruby/):</p>
+<p>This is where we get into the hairy business of Ruby’s closures. Closures are a bit of a strange concept, especially in the context of object-oriented programming, in which we rely on objects for pretty much everything. Still, it’s worth knowing about closures, Ruby has them, and understanding them will help you in certain other functional or functional hybrid languages, such as JavaScript. Alan Skorkin has <a href="http://www.skorks.com/2010/05/closures-a-simple-explanation-using-ruby/">a nice, succinct definition of closures on his blog</a>:</p>
 
 <blockquote>
   <p>A closure is basically a function/method that has the following two properties:</p>
@@ -99,7 +99,7 @@
 • It remembers the values of all the variables that were in scope when the function was created. It is then able to access those variables when it is called even though they may no longer be in scope.</p>
 </blockquote>
 
-<p>That is</p>
+<p>I recommend his post about closures. It’s</p>
 
 <p>http://yehudakatz.com/2009/11/15/metaprogramming-in-ruby-its-all-about-the-self/</p>
 
