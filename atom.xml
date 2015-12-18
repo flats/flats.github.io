@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-18T15:33:53-05:00</updated>
+  <updated>2015-12-18T16:29:01-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -99,7 +99,11 @@
 • It remembers the values of all the variables that were in scope when the function was created. It is then able to access those variables when it is called even though they may no longer be in scope.</p>
 </blockquote>
 
-<p>I recommend his post about closures. It’s</p>
+<p>I recommend Mr. Skorkin’s post about closures. It’s clear and precise and covers both Ruby’s implementation of closures and some common uses of closures. If closures are confusing to you, as they were to me, go ahead and read this post and come back when you’re finished.</p>
+
+<p>Here’s the crazy thing: Ruby blocks, which are closures, close over variables and <em>also close over blocks</em>. They are insane cannibal constructs. So, the problem here is that the yield in the body of my <code>#each</code> is actually yielding to the implicit block (whether it’s passed or not) passed to <code>#create_method</code>. Crazy pants.</p>
+
+<p>Lemme break that down.</p>
 
 <p>http://yehudakatz.com/2009/11/15/metaprogramming-in-ruby-its-all-about-the-self/</p>
 
