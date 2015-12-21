@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: school | Basic Object]]></title>
-  <link href="http://flats.github.io/blog/categories/school/atom.xml" rel="self"/>
+  <title><![CDATA[Category: ruby, | Basic Object]]></title>
+  <link href="http://flats.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-21T18:00:29-05:00</updated>
+  <updated>2015-12-21T18:02:42-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -12,6 +12,107 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Closures, Yield, and the Enumerable Module]]></title>
+    <link href="http://flats.github.io/blog/2015/12/10/closures-yield-and-the-enumerable-module/"/>
+    <updated>2015-12-10T18:08:24-05:00</updated>
+    <id>http://flats.github.io/blog/2015/12/10/closures-yield-and-the-enumerable-module</id>
+    <content type="html"><![CDATA[<p>I tried to make a class Enumerable by dynamically mixing in the Enumerable module and defining <code>#each</code> after declaring the class. I failed. This is my story.</p>
+
+<hr />
+
+<p>I was messing around with dynamically mixing in Ruby modules. One of the most useful modules in Ruby is the <code>Enumerable</code> module. It’s a total badass. So I thought I’d try mixing it into a class that I had already defined and see if that worked out.</p>
+
+<p>The first step is including it dynamically. Maybe I can just call the include method on my class!
+<code>ruby
+MyClass.include(Enumerable)
+</code>
+Okay! That appears to work. No exceptions. Now let’s use it. I’ll try out using <code>#reduce</code>, one of my favorite higher-order functions in Ruby.
+<code>ruby
+my_thing = MyClass.new
+my_thing.reduce { |thing| puts thing } # =&gt; NoMethodError: undefined method `each' for #&lt;MyClass:0x007fe59c0e3588&gt;
+</code>
+Oops. In order to take advantage of the Enumerable module, you need both to include the module and <a href="http://www.rubydoc.info/stdlib/core/2.2.2/Enumerable">define</a> your own <code>#each</code> method.[^1] This makes a lot of sense - how can your class be enumerable in there’s nothing to enumerate?</p>
+
+<p>I could just define <code>#each</code> in my class definition and be done with it, but this is all about exploring the process of dynamically modifying classes. Let’s just just pretend that doing that is not an option here and we want to add this instance method to the class after it’s been defined.</p>
+
+<p>Defining an instance method for a class after the class definition, however, is pretty awkward. We can’t just use the dot syntax on a class instance, becuase that would definite our <code>#each</code> for just that one instance, not all instances of <code>MyClass</code>. The best way to do this is to use <code>#define_method</code>. We can, of course, use <code>Class#class_eval</code>, and it may be preferable from a <a href="http://greyblake.com/blog/2012/09/02/ruby-perfomance-tricks/">performance perspective</a>, but it’s not very readable and unless we absolutely need to squeeze every ounce of performance out of this code, we should probably avoid it. Also, that’s too easy. Let’s make this harder. Let’s use <code>#define_method</code>.</p>
+
+<p>The problem here is that <code>#define_method</code> is a private method that every class inherits from <code>Module</code>. So we can’t just call <code>MyClass.define_method</code>. We have to either create a method in the class definition that in turns calls <code>#define_method</code> for us,
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">MyClass</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">create_method</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="n">method_body</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">define_method</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="n">method_body</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;each_body = lambda {</span>
+</span><span class='line'><span class="sr">  yield 1</span>
+</span><span class='line'><span class="sr">  yield 2</span>
+</span><span class='line'><span class="sr">  yield 3</span>
+</span><span class='line'><span class="sr">}</span>
+</span><span class='line'><span class="sr">MyClass.create_method(:each, each_body)</span>
+</span><span class='line'><span class="sr">&lt;code&gt;</span>
+</span><span class='line'><span class="sr">or we have to use `#__send__`.</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">ruby</span>
+</span><span class='line'><span class="n">my_thing</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:define_method</span><span class="p">,</span> <span class="ss">:each</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">yield</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="k">yield</span> <span class="mi">2</span>
+</span><span class='line'>  <span class="k">yield</span> <span class="mi">3</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>All instances of <code>MyClass</code> will now have our <code>#each</code>. Great. Let’s try using it now!
+<code>ruby
+my_thing = MyClass.new
+my_thing.map { |thing| puts thing } # =&gt; no block given (yield) (LocalJumpError)
+</code>
+What? No block given? I definitely just passed in a block. What went wrong?</p>
+
+<h3 id="block-as-closures-and-the-behavior-of-yield">Block as Closures and the Behavior of <code>yield</code></h3>
+
+<p>This is where we get into the hairy business of Ruby’s closures. Closures are a bit of a strange concept, especially in the context of object-oriented programming, in which we rely on objects for pretty much everything. Still, it’s worth knowing about closures, Ruby has them, and understanding them will help you in certain other functional or functional hybrid languages, such as JavaScript. Alan Skorkin has <a href="http://www.skorks.com/2010/05/closures-a-simple-explanation-using-ruby/">a nice, succinct definition of closures on his blog</a>:</p>
+
+<blockquote>
+  <p>A closure is basically a function/method that has the following two properties:</p>
+
+  <p>• You can pass it around like an object (to be called later)<br />
+• It remembers the values of all the variables that were in scope when the function was created. It is then able to access those variables when it is called even though they may no longer be in scope.</p>
+</blockquote>
+
+<p>I recommend Mr. Skorkin’s post about closures. It’s clear and precise and covers both Ruby’s implementation of closures and some common uses of closures. If closures are confusing to you, as they were to me, go ahead and read this post and come back when you’re finished.</p>
+
+<p>Ruby blocks are closures. When you create a block and pass it to a method, it closes over all of the variables and constants in its lexical scope.Here’s the crazy thing: Ruby blocks <em>also close over blocks</em>. They are insane cannibal constructs. So, the problem here is that the yield in the body of my <code>#each</code> is actually yielding to the implicit block (whether it’s passed or not) passed to <code>#create_method</code>. Crazy pants.</p>
+
+<p>As Paul Inning says in <a href="https://innig.net/software/ruby/closures-in-ruby">his encyclopedic discussion of Ruby closures</a>, “<code>yield</code> can <em>only</em> refer to the block passed to the method it’s in.” John Mair, creator of our beloved Pry REPL, <a href="https://banisterfiend.wordpress.com/2010/11/06/behavior-of-yield-in-define_method/">believes that this is actually pretty consistent behavior</a>, and that makes sense to me - because blocks close over blocks, any method can receive a block, and a method can handle only one block at a time, <code>yield</code> has to just refer to the block passed to the method in which it finds itself.</p>
+
+<hr />
+
+<p>Phew. Okay, fine, I’ll just use <code>Class#class_eval</code>. Or maybe I’ll just actually <code>include Enumerable</code> and define <code>#each</code> like a normal human being.</p>
+
+<p>[^1] Also note that (from the Ruby documentation) “If <code>Enumerable#max</code>, <code>#min</code>, or <code>#sort</code> is used, the objects in the collection must also implement a meaningful <code>&lt;=&gt;</code> operator, as these methods rely on an ordering between members of the collection.”</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Getting to Know Ruby's Map and Reduce]]></title>
