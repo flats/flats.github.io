@@ -3,7 +3,7 @@ layout: post
 title: "Getting to Know Ruby's Map and Reduce"
 date: 2015-12-02 21:27:10 -0500
 comments: true
-categories: "Flatiron School"
+categories: flatiron ruby programming
 ---
 The `#map` and `#reduce` functions are most closely associated with functional programming.[^1] Even so, Ruby, the object-oriented-est of all object-oriented programming languages, has robust implementations of both of these extremely expressive higher-order functions. I'm going to explore how to use these methods and what you can do with them, especially when you use them together. This will be pretty exhaustive, so be prepared for a *very* long blog post.
 
@@ -66,7 +66,7 @@ Let's break this not-quite-recursive code down into separate steps.
 
 3. Now the iteration begins. If this new 'memo' array is empty, which will only happen on the first iteration of `#inject`, `#inject` adds that element ("X") to the beginning of `memo` (using `Array#unshift`). Otherwise, `#inject` adds a string to `memo` containing the result of the previous iteration ("X"), the separator ("::"), and the current element ("Y").
 
-So, the final array is built backwards: ["X"], then ["X::Y", "X"], and then finally ["X::Y::Z", "X::Y", "X"]. Nifty. There is certainly a recursive solution to this problem, but this is a great example of how higher-order functions can be used as an alternative to recursion.
+So, the final array is built backwards: ["X"], then ["X::Y", "X"], and then finally ["X::Y::Z", "X::Y", "X"]. Nifty. There's a recursive solution to this problem, but it's not nearly as clear and concise. This is a great example of how higher-order functions can be used as an alternative to recursion.
 
 ### Map Arrays of Strings ###
 
