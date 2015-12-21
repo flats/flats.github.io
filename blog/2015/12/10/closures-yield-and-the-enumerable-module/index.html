@@ -177,15 +177,9 @@
 
 <p>Here’s the crazy thing: Ruby blocks, which are closures, close over variables and <em>also close over blocks</em>. They are insane cannibal constructs. So, the problem here is that the yield in the body of my <code>#each</code> is actually yielding to the implicit block (whether it’s passed or not) passed to <code>#create_method</code>. Crazy pants.</p>
 
-<p>As Paul Inning says in <a href="https://innig.net/software/ruby/closures-in-ruby">his encyclopedic discussion of Ruby closures</a>, ““yield” can <em>only</em> refer to the block passed to the method it’s in.”</p>
+<p>As Paul Inning says in <a href="https://innig.net/software/ruby/closures-in-ruby">his encyclopedic discussion of Ruby closures</a>, “<code>yield</code> can <em>only</em> refer to the block passed to the method it’s in.” John Mair, creator of our beloved Pry REPL, <a href="https://banisterfiend.wordpress.com/2010/11/06/behavior-of-yield-in-define_method/">believes that this is actually pretty consistent behavior</a>, and I have to agree - because blocks close over blocks, any method can receive a block, and a method can handle only one block at a time, <code>yield</code> has to just refer to the block passed to the method in which it finds itself.</p>
 
 <p>http://yehudakatz.com/2009/11/15/metaprogramming-in-ruby-its-all-about-the-self/</p>
-
-<p>https://banisterfiend.wordpress.com/2010/11/06/behavior-of-yield-in-define_method/</p>
-
-<p>http://blog.sidu.in/2007/11/ruby-blocks-gotchas.html</p>
-
-<p>https://innig.net/software/ruby/closures-in-ruby</p>
 
 <p>[^1] Also note that (from the Ruby documentation) “If <code>Enumerable#max</code>, <code>#min</code>, or <code>#sort</code> is used, the objects in the collection must also implement a meaningful <code>&lt;=&gt;</code> operator, as these methods rely on an ordering between members of the collection.”</p>
 </div>
