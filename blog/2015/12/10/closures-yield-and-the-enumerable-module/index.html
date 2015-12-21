@@ -99,7 +99,7 @@
 
 <hr />
 
-<p>I was messing around with dynamically mixing in Ruby modules. Yep, I was pretty bored. Anyway, one of the most useful modules in Ruby is the <code>Enumerable</code> module. It’s a total badass. So I thought I’d try mixing it into a class that I had already defined and see if that worked out.</p>
+<p>I was messing around with dynamically mixing in Ruby modules. One of the most useful modules in Ruby is the <code>Enumerable</code> module. It’s a total badass. So I thought I’d try mixing it into a class that I had already defined and see if that worked out.</p>
 
 <p>The first step is including it dynamically. Maybe I can just call the include method on my class!</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -111,11 +111,11 @@
 </pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">my_thing</span> <span class="o">=</span> <span class="no">MyClass</span><span class="o">.</span><span class="n">new</span>
 </span><span class="line"><span class="n">my_thing</span><span class="o">.</span><span class="n">reduce</span> <span class="p">{</span> <span class="o">|</span><span class="n">thing</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">thing</span> <span class="p">}</span> <span class="c1"># =&gt; NoMethodError: undefined method `each&#39; for #&lt;MyClass:0x007fe59c0e3588&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>Oops. In order to take advantage of the Enumerable module, you need to include the module and <a href="http://www.rubydoc.info/stdlib/core/2.2.2/Enumerable">also define</a> an <code>#each</code> method.[^1] This makes a lot of sense - how can your class be enumerable in there’s nothing to enumerate?</p>
+<p>Oops. In order to take advantage of the Enumerable module, you need both to include the module and <a href="http://www.rubydoc.info/stdlib/core/2.2.2/Enumerable">define</a> your own <code>#each</code> method.[^1] This makes a lot of sense - how can your class be enumerable in there’s nothing to enumerate?</p>
 
-<p>Okay, let’s do that. I could just define it in my class definition and be done with it. I’m having fun working with dynamically modifying classes, though, so let’s just just pretend that doing that is not an option and we want to add this instance method to the class after it’s been defined.</p>
+<p>I could just define <code>#each</code> in my class definition and be done with it, but this is all about exploring the process of dynamically modifying classes. Let’s just just pretend that doing that is not an option here and we want to add this instance method to the class after it’s been defined.</p>
 
-<p>Defining an instance method for a class after the class definition, however, is pretty awkward. We can’t just use the dot syntax on an instance, becuase that would definite our <code>#each</code> for just that one instance, not all instances of <code>MyClass</code>. The best way to do this is to use <code>#define_method</code>. We can, of course, use <code>Class#class_eval</code>, and it may be preferable from a <a href="http://greyblake.com/blog/2012/09/02/ruby-perfomance-tricks/">performance perspective</a>, but it’s not very readable and unless we absolutely need to squeeze every ounce of performance out of this code, we should avoid it.</p>
+<p>Defining an instance method for a class after the class definition, however, is pretty awkward. We can’t just use the dot syntax on a class instance, becuase that would definite our <code>#each</code> for just that one instance, not all instances of <code>MyClass</code>. The best way to do this is to use <code>#define_method</code>. We can, of course, use <code>Class#class_eval</code>, and it may be preferable from a <a href="http://greyblake.com/blog/2012/09/02/ruby-perfomance-tricks/">performance perspective</a>, but it’s not very readable and unless we absolutely need to squeeze every ounce of performance out of this code, we should probably avoid it. Also, that’s too easy. Let’s make this harder. Let’s use <code>#define_method</code>.</p>
 
 <p>The problem here is that <code>#define_method</code> is a private method that every class inherits from <code>Module</code>. So we can’t just call <code>MyClass.define_method</code>. We have to either create a method in the class definition that in turns calls <code>#define_method</code> for us,</p>
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -177,11 +177,15 @@
 
 <p>Here’s the crazy thing: Ruby blocks, which are closures, close over variables and <em>also close over blocks</em>. They are insane cannibal constructs. So, the problem here is that the yield in the body of my <code>#each</code> is actually yielding to the implicit block (whether it’s passed or not) passed to <code>#create_method</code>. Crazy pants.</p>
 
-<p>Lemme break that down.</p>
+<p>As Paul Inning says in <a href="https://innig.net/software/ruby/closures-in-ruby">his encyclopedic discussion of Ruby closures</a>, ““yield” can <em>only</em> refer to the block passed to the method it’s in.”</p>
 
 <p>http://yehudakatz.com/2009/11/15/metaprogramming-in-ruby-its-all-about-the-self/</p>
 
 <p>https://banisterfiend.wordpress.com/2010/11/06/behavior-of-yield-in-define_method/</p>
+
+<p>http://blog.sidu.in/2007/11/ruby-blocks-gotchas.html</p>
+
+<p>https://innig.net/software/ruby/closures-in-ruby</p>
 
 <p>[^1] Also note that (from the Ruby documentation) “If <code>Enumerable#max</code>, <code>#min</code>, or <code>#sort</code> is used, the objects in the collection must also implement a meaningful <code>&lt;=&gt;</code> operator, as these methods rely on an ordering between members of the collection.”</p>
 </div>
