@@ -167,6 +167,8 @@
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>What? No block given? I definitely just passed in a block. What went wrong?</p>
 
+<h1 id="block-as-closures-and-the-behavior-of-yield">Block as Closures and the Behavior of <code>yield</code></h1>
+
 <p>This is where we get into the hairy business of Ruby’s closures. Closures are a bit of a strange concept, especially in the context of object-oriented programming, in which we rely on objects for pretty much everything. Still, it’s worth knowing about closures, Ruby has them, and understanding them will help you in certain other functional or functional hybrid languages, such as JavaScript. Alan Skorkin has <a href="http://www.skorks.com/2010/05/closures-a-simple-explanation-using-ruby/">a nice, succinct definition of closures on his blog</a>:</p>
 
 <blockquote>
@@ -178,11 +180,11 @@
 
 <p>I recommend Mr. Skorkin’s post about closures. It’s clear and precise and covers both Ruby’s implementation of closures and some common uses of closures. If closures are confusing to you, as they were to me, go ahead and read this post and come back when you’re finished.</p>
 
-<p>Here’s the crazy thing: Ruby blocks, which are closures, close over variables and <em>also close over blocks</em>. They are insane cannibal constructs. So, the problem here is that the yield in the body of my <code>#each</code> is actually yielding to the implicit block (whether it’s passed or not) passed to <code>#create_method</code>. Crazy pants.</p>
+<p>Ruby blocks are closures. When you create a block and pass it to a method, it closes over all of the variables and constants in its lexical scope.Here’s the crazy thing: Ruby blocks <em>also close over blocks</em>. They are insane cannibal constructs. So, the problem here is that the yield in the body of my <code>#each</code> is actually yielding to the implicit block (whether it’s passed or not) passed to <code>#create_method</code>. Crazy pants.</p>
 
 <p>As Paul Inning says in <a href="https://innig.net/software/ruby/closures-in-ruby">his encyclopedic discussion of Ruby closures</a>, “<code>yield</code> can <em>only</em> refer to the block passed to the method it’s in.” John Mair, creator of our beloved Pry REPL, <a href="https://banisterfiend.wordpress.com/2010/11/06/behavior-of-yield-in-define_method/">believes that this is actually pretty consistent behavior</a>, and I have to agree - because blocks close over blocks, any method can receive a block, and a method can handle only one block at a time, <code>yield</code> has to just refer to the block passed to the method in which it finds itself.</p>
 
-<p>http://yehudakatz.com/2009/11/15/metaprogramming-in-ruby-its-all-about-the-self/</p>
+<p>Phew. Okay, fine, I’ll just use <code>Class#class_eval</code>. Or maybe I’ll just actually <code>include Enumerable</code> and define <code>#each</code> like a normal human being.</p>
 
 <p>[^1] Also note that (from the Ruby documentation) “If <code>Enumerable#max</code>, <code>#min</code>, or <code>#sort</code> is used, the objects in the collection must also implement a meaningful <code>&lt;=&gt;</code> operator, as these methods rely on an ordering between members of the collection.”</p>
 </div>
