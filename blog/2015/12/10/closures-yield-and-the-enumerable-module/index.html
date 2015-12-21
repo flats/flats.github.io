@@ -179,7 +179,9 @@
 
 <p>Ruby blocks are closures. When you create a block and pass it to a method, it closes over all of the variables and constants in its lexical scope.Here’s the crazy thing: Ruby blocks <em>also close over blocks</em>. They are insane cannibal constructs. So, the problem here is that the yield in the body of my <code>#each</code> is actually yielding to the implicit block (whether it’s passed or not) passed to <code>#create_method</code>. Crazy pants.</p>
 
-<p>As Paul Inning says in <a href="https://innig.net/software/ruby/closures-in-ruby">his encyclopedic discussion of Ruby closures</a>, “<code>yield</code> can <em>only</em> refer to the block passed to the method it’s in.” John Mair, creator of our beloved Pry REPL, <a href="https://banisterfiend.wordpress.com/2010/11/06/behavior-of-yield-in-define_method/">believes that this is actually pretty consistent behavior</a>, and I have to agree - because blocks close over blocks, any method can receive a block, and a method can handle only one block at a time, <code>yield</code> has to just refer to the block passed to the method in which it finds itself.</p>
+<p>As Paul Inning says in <a href="https://innig.net/software/ruby/closures-in-ruby">his encyclopedic discussion of Ruby closures</a>, “<code>yield</code> can <em>only</em> refer to the block passed to the method it’s in.” John Mair, creator of our beloved Pry REPL, <a href="https://banisterfiend.wordpress.com/2010/11/06/behavior-of-yield-in-define_method/">believes that this is actually pretty consistent behavior</a>, and that makes sense to me - because blocks close over blocks, any method can receive a block, and a method can handle only one block at a time, <code>yield</code> has to just refer to the block passed to the method in which it finds itself.</p>
+
+<hr />
 
 <p>Phew. Okay, fine, I’ll just use <code>Class#class_eval</code>. Or maybe I’ll just actually <code>include Enumerable</code> and define <code>#each</code> like a normal human being.</p>
 
