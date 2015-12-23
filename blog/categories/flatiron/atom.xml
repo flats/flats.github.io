@@ -4,7 +4,7 @@
   <title><![CDATA[Category: flatiron | Basic Object]]></title>
   <link href="http://flats.github.io/blog/categories/flatiron/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-23T10:10:40-05:00</updated>
+  <updated>2015-12-23T10:14:25-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -87,7 +87,7 @@ Oops. In order to take advantage of the Enumerable module, you need both to incl
 my_thing = MyClass.new
 my_thing.map { |thing| puts thing } # =&gt; no block given (yield) (LocalJumpError)
 </code>
-What? No block given? I definitely just passed in a block. What went wrong?</p>
+What? <a href="http://ruby-doc.org/core-2.2.2/LocalJumpError.html">LocalJumpError</a>? No block given? I definitely just passed in a block. What went wrong?</p>
 
 <h3 id="block-as-closures-and-the-behavior-of-yield">Block as Closures and the Behavior of <code>yield</code></h3>
 
