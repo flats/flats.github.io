@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Basic Object]]></title>
   <link href="http://flats.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-23T10:09:25-05:00</updated>
+  <updated>2015-12-23T10:10:19-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -33,7 +33,7 @@ Okay! That appears to work. No exceptions. Now let’s use it. I’ll try out us
 my_thing = MyClass.new
 my_thing.reduce { |thing| puts thing } # =&gt; NoMethodError: undefined method `each' for #&lt;MyClass:0x007fe59c0e3588&gt;
 </code>
-Oops. In order to take advantage of the Enumerable module, you need both to include the module and <a href="http://www.rubydoc.info/stdlib/core/2.2.2/Enumerable">define</a> your own <code>#each</code> method.[^1] This makes a lot of sense - how can your class be enumerable in there’s nothing to enumerate?</p>
+Oops. In order to take advantage of the Enumerable module, you need both to include the module and <a href="http://www.rubydoc.info/stdlib/core/2.2.2/Enumerable">define</a> your own <code>#each</code> method.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> This makes a lot of sense - how can your class be enumerable in there’s nothing to enumerate?</p>
 
 <p>I could just define <code>#each</code> in my class definition and be done with it, but this is all about exploring the process of dynamically modifying classes. Let’s just just pretend that doing that is not an option here and we want to add this instance method to the class after it’s been defined.</p>
 
@@ -110,7 +110,13 @@ What? No block given? I definitely just passed in a block. What went wrong?</p>
 
 <p>Phew. Okay, fine, I’ll just use <code>Class#class_eval</code>. Or maybe I’ll just actually <code>include Enumerable</code> and define <code>#each</code> like a normal human being.</p>
 
-<p>[^1] Also note that (from the Ruby documentation) “If <code>Enumerable#max</code>, <code>#min</code>, or <code>#sort</code> is used, the objects in the collection must also implement a meaningful <code>&lt;=&gt;</code> operator, as these methods rely on an ordering between members of the collection.”</p>
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Also note that (from the Ruby documentation) “If <code>Enumerable#max</code>, <code>#min</code>, or <code>#sort</code> is used, the objects in the collection must also implement a meaningful <code>&lt;=&gt;</code> operator, as these methods rely on an ordering between members of the collection.” <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 ]]></content>
   </entry>
   
