@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2015-12-23T12:34:59-05:00</updated>
+  <updated>2016-01-04T11:58:22-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -12,6 +12,65 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Frozen Strings, Symbols, and Garbage Collection in Ruby 2.3/2.4]]></title>
+    <link href="http://flats.github.io/blog/2016/01/03/frozen-strings/"/>
+    
+    <updated>2016-01-03T03:21:09-05:00</updated>
+    <id>http://flats.github.io/blog/2016/01/03/frozen-strings</id>
+    
+    <content type="html"><![CDATA[<p>I was perusing <a href="https://github.com/thoughtbot/paperclip">the paperclip gem’s source code</a> when I came upon the following line (lib/paperclip/interpolations.rb, line 178):</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="p">(</span><span class="s2">&quot;%09d&quot;</span><span class="o">.</span><span class="n">freeze</span> <span class="o">%</span> <span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/\d{3}/</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">freeze</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>It’s a useful bit of code for saving attachments to a filesystem, but what struck me immediately was the preponderance of <code>#freeze</code> calls. What the hell is <code>#freeze</code> anyway?</p>
+
+<p>Well, apparently <code>#freeze</code> is used pretty often by experienced Ruby developers. You’ll see it especially in popular Gems that have gone through several versions and have a large number of contributors.</p>
+
+<p>There are a couple of reasons you might want to use it. Here they are.</p>
+
+<h3 id="make-an-object-immutable">Make an Object Immutable</h3>
+
+<p>Ruby constants are really just variables that you shouldn’t change. Ruby will warn you if you change a constant, but it won’t raise an exception. So, if you really want to have Ruby enforce the constancy of a constant, you can freeze that object.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="no">JEDI_MASTER</span> <span class="o">=</span> <span class="s2">&quot;Kenobi&quot;</span><span class="o">.</span><span class="n">freeze</span>
+</span><span class="line"><span class="no">JEDI_MASTER</span><span class="o">.</span><span class="n">prepend</span><span class="p">(</span><span class="s2">&quot;Rey &quot;</span><span class="p">)</span> <span class="c1"># =&gt; RuntimeError: can&#39;t modify frozen String</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Remember that when you assign a frozen object to a variable, this does not prevent the variable from being reassigned to another object. The following code, for example, works just fine:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="no">JEDI_MASTER</span> <span class="o">=</span> <span class="s2">&quot;Kenobi&quot;</span><span class="o">.</span><span class="n">freeze</span>
+</span><span class="line"><span class="no">JEDI_MASTER</span> <span class="o">=</span> <span class="s2">&quot;Rey Kenobi&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>You can extend this to create a whole class of objects that are constant from birth - just call <code>#freeze</code> at the end of a class’s initialize function definition. This might come in handy if you’re <a href="http://blog.honeybadger.io/when-to-use-freeze-and-frozen-in-ruby/">trying to write Ruby in a functional style</a>.</p>
+
+<h3 id="performance">Performance</h3>
+
+<p>As great as this is, this is not why the paperclip developers use <code>#freeze</code> three times in that line at the beginning of this post.</p>
+
+<p>They use it to <a href="http://www.sitepoint.com/unraveling-string-key-performance-ruby-2-2/">optimize for performance</a>. Ruby treats frozen strings similarly to the way it treats symbols - it will allocate one and only one object for each frozen string in an application’s lifetime. Therefore, if you freeze the string literals you don’t ever intend to modify in a method (such as <code>"/"</code> and the format string <code>"%09d"</code> in the example above) that gets called multiple times, Ruby will allocate those string objects the first time the method is called and then just reference those existing object on every subsequent call.</p>
+
+<p>Because this improves performances and reduces memory requirements considerably, Ruby is moving in the direction of freezing strings by default. Starting with Ruby 2.2, strings used as hash keys are frozen by default, and Ruby 3.0 will freeze all string literals by default. You can see what life is like with frozen string literals right now with the frozen_string_literal pragma, which is <a href="https://blog.blockscore.com/new-features-in-ruby-2-3/">available in Ruby 2.3 or later</a>.</p>
+
+<p>So why not just use symbols all of the time? Well, for starters, you might want to use some <code>String</code> methods! The <code>#%</code>, <code>#scan</code>, and <code>#join</code> calls in the example above wouldn’t be possible with symbols. Ruby strings are powerful and converting a string to a symbol is pretty slow, so it’s better to just use a string and freeze it where appropriate.</p>
+
+<p>In addition, as Richard Schneeman points out in <a href="http://www.sitepoint.com/unraveling-string-key-performance-ruby-2-2/">his excellent post about string keys in Ruby 2.0</a>, creating symbols based on user input can lead to a particular sort of denial of service attack and other potential security problems. <a href="https://www.ruby-lang.org/en/news/2013/02/22/json-dos-cve-2013-0269/">The JSON gem suffered from this vulnerability before Ruby 2.0.0</a>, and Mr. Schneeman has some other examples of this vulnerability in <a href="http://www.sitepoint.com/symbol-gc-ruby-2-2/">his post about symbol garbage collection in Ruby 2.2</a>.</p>
+
+<hr />
+
+<p>Freezing strings is the low-hanging fruit of RUby optimization. Even though Ruby will soon be freezing strings by default, the absolute fastest way to freeze a string is to do it manually. Freeze is your friend when you’re optimizng your Ruby code.</p>
+]]></content>
+    
+  </entry>
   
   <entry>
     
