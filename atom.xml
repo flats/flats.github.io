@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2016-01-04T23:54:49-05:00</updated>
+  <updated>2016-01-05T00:51:14-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -29,7 +29,7 @@
 
 <p>It’s a useful bit of code for saving attachments to a filesystem, but what struck me immediately was the preponderance of <code>#freeze</code> calls. What the hell is <code>#freeze</code> anyway?</p>
 
-<p>Well, apparently <code>#freeze</code> is used pretty often by experienced Ruby developers. You’ll see it especially in popular Gems that have gone through several versions and have a large number of contributors.</p>
+<p>Well, apparently <code>#freeze</code> is used pretty often by experienced Ruby developers. It’s a method of the <code>Object</code> class, and it prevents the frozen object from ever being modified again. <em>Ever</em>.You’ll see it especially in popular Gems that have gone through several versions and have a large number of contributors.</p>
 
 <p>There are a couple of reasons you might want to use it. Here they are.</p>
 
@@ -57,7 +57,7 @@
 
 <p>As great as this is, this is not why the paperclip developers use <code>#freeze</code> three times in that line at the beginning of this post.</p>
 
-<p>They use it to <a href="http://www.sitepoint.com/unraveling-string-key-performance-ruby-2-2/">optimize for performance</a>. Ruby treats frozen strings similarly to the way it treats symbols - it will allocate one and only one object for each frozen string in an application’s lifetime. Therefore, if you freeze the string literals you don’t ever intend to modify in a method (such as <code>"/"</code> and the format string <code>"%09d"</code> in the example above) that gets called multiple times, Ruby will allocate those string objects the first time the method is called and then just reference those existing object on every subsequent call.</p>
+<p>They use it to <a href="http://www.sitepoint.com/unraveling-string-key-performance-ruby-2-2/">optimize for performance</a>. Ruby treats frozen strings similarly to the way it treats symbols (which, along with fixnums, bignums, and floats, are frozen by default) - it will allocate one and only one object for each frozen string in an application’s lifetime. (This is not strictly true in newer versions of Ruby, but it’s pretty close to that - there are more details in the article below about symbol garbage collection in Ruby 2.2.) Therefore, if you freeze the string literals you don’t ever intend to modify in a method (such as <code>"/"</code> and the format string <code>"%09d"</code> in the example above) that gets called multiple times, Ruby will allocate those string objects the first time the method is called and then just reference those existing object on every subsequent call.</p>
 
 <p>Because this improves performances and reduces memory requirements considerably, Ruby is moving in the direction of freezing strings by default. Starting with Ruby 2.2, strings used as hash keys are frozen by default, and Ruby 3.0 will freeze all string literals by default. You can see what life is like with frozen string literals right now with the frozen_string_literal pragma, which is <a href="https://blog.blockscore.com/new-features-in-ruby-2-3/">available in Ruby 2.3 or later</a>.</p>
 
