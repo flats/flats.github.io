@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2016-01-05T00:51:14-05:00</updated>
+  <updated>2016-01-05T00:53:09-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -29,7 +29,7 @@
 
 <p>It’s a useful bit of code for saving attachments to a filesystem, but what struck me immediately was the preponderance of <code>#freeze</code> calls. What the hell is <code>#freeze</code> anyway?</p>
 
-<p>Well, apparently <code>#freeze</code> is used pretty often by experienced Ruby developers. It’s a method of the <code>Object</code> class, and it prevents the frozen object from ever being modified again. <em>Ever</em>.You’ll see it especially in popular Gems that have gone through several versions and have a large number of contributors.</p>
+<p>Well, apparently <code>#freeze</code> is used pretty often by experienced Ruby developers. It’s a method of the <code>Object</code> class, and <a href="http://ruby-doc.org/core-2.3.0/Object.html#method-i-freeze">“it prevents further modifications” of an object</a>. You’ll see it especially in popular Gems that have gone through several versions and have a large number of contributors.</p>
 
 <p>There are a couple of reasons you might want to use it. Here they are.</p>
 
