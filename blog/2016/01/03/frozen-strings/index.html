@@ -104,11 +104,11 @@
 
 <p>It’s a useful bit of code for saving attachments to a filesystem, but what struck me immediately was the preponderance of <code>#freeze</code> calls. What the hell is <code>#freeze</code> anyway?</p>
 
-<p>Well, apparently <code>#freeze</code> is used pretty often by experienced Ruby developers. It’s a method of the <code>Object</code> class, and <a href="http://ruby-doc.org/core-2.3.0/Object.html#method-i-freeze">“it prevents further modifications” of an object</a>. You’ll see it especially in popular Gems that have gone through several versions and have a large number of contributors.</p>
+<p>Well, apparently <code>#freeze</code> is relatively common in mature Ruby code. It’s a method of the <code>Object</code> class, and <a href="http://ruby-doc.org/core-2.3.0/Object.html#method-i-freeze">“it prevents further modifications” of an object</a>.</p>
 
-<p>There are a couple of reasons you might want to use it. Here they are.</p>
+<p>There are a couple of reasons you might want to use it.</p>
 
-<h3 id="make-an-object-immutable">Make an Object Immutable</h3>
+<h3 id="make-an-object-immutable">1. Make an Object Immutable</h3>
 
 <p>Ruby constants are really just variables that you shouldn’t change. Ruby will warn you if you change a constant, but it won’t raise an exception. So, if you really want to have Ruby enforce the constancy of a constant, you can freeze that object.</p>
 
@@ -126,23 +126,38 @@
 </span><span class="line"><span class="no">JEDI_MASTER</span> <span class="o">=</span> <span class="s2">&quot;Rey Kenobi&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>You can extend this to create a whole class of objects that are constant from birth - just call <code>#freeze</code> at the end of a class’s initialize function definition. This might come in handy if you’re <a href="http://blog.honeybadger.io/when-to-use-freeze-and-frozen-in-ruby/">trying to write Ruby in a functional style</a>.</p>
+<p>You can extend this to create a whole class of objects that are constant from birth - just call <code>#freeze</code> at the end of a class’s initialize function definition. This might come in handy if you’re <a href="http://blog.honeybadger.io/when-to-use-freeze-and-frozen-in-ruby/">trying to write Ruby in a functional style</a>, or if you need to prevent a programmatically important string (such as a hash key) from being modified by some other code.</p>
 
-<h3 id="performance">Performance</h3>
+<h3 id="performance">2. Performance</h3>
 
-<p>As great as this is, this is not why the paperclip developers use <code>#freeze</code> three times in that line at the beginning of this post.</p>
+<p>As great as this is, this is not why the paperclip developers used <code>#freeze</code> three times in that line at the beginning of this post.</p>
 
-<p>They use it to <a href="http://www.sitepoint.com/unraveling-string-key-performance-ruby-2-2/">optimize for performance</a>. Ruby treats frozen strings similarly to the way it treats symbols (which, along with fixnums, bignums, and floats, are frozen by default) - it will allocate one and only one object for each frozen string in an application’s lifetime. (This is not strictly true in newer versions of Ruby, but it’s pretty close to that - there are more details in the article below about symbol garbage collection in Ruby 2.2.) Therefore, if you freeze the string literals you don’t ever intend to modify in a method (such as <code>"/"</code> and the format string <code>"%09d"</code> in the example above) that gets called multiple times, Ruby will allocate those string objects the first time the method is called and then just reference those existing object on every subsequent call.</p>
+<p>They used it to <a href="http://www.sitepoint.com/unraveling-string-key-performance-ruby-2-2/">optimize for performance</a>. Because a frozen object can’t be modified, frozen objects in Ruby are only instantiated a single time for each unique object<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> and then retained to be reused in the future. Symbols, fixnums, bignums, and floats are all frozen by default. Strings, however, aren’t, and it’s pretty common for the same string literal - such as the format string in the above example - to be called many, many times in an application.</p>
 
-<p>Because this improves performances and reduces memory requirements considerably, Ruby is moving in the direction of freezing strings by default. Starting with Ruby 2.2, strings used as hash keys are frozen by default, and Ruby 3.0 will freeze all string literals by default. You can see what life is like with frozen string literals right now with the frozen_string_literal pragma, which is <a href="https://blog.blockscore.com/new-features-in-ruby-2-3/">available in Ruby 2.3 or later</a>.</p>
+<p>Therefore, freezing a string literal that you don’t ever intend to modify (such as <code>"/"</code> and the format string <code>"%09d"</code> in the example above) in a method that gets called multiple times can result in substantial memory savings and faster performance. Ruby will allocate those string objects the first time the method is called and then just reference those existing string objects on every subsequent call.</p>
 
-<p>So why not just use symbols all of the time? Well, for starters, you might want to use some <code>String</code> methods! The <code>#%</code>, <code>#scan</code>, and <code>#join</code> calls in the example above wouldn’t be possible with symbols. Ruby strings are powerful and converting a string to a symbol is pretty slow, so it’s better to just use a string and freeze it where appropriate.</p>
+<h2 id="an-immutable-future">An Immutable Future</h2>
 
-<p>In addition, as Richard Schneeman points out in <a href="http://www.sitepoint.com/unraveling-string-key-performance-ruby-2-2/">his excellent post about string keys in Ruby 2.0</a>, creating symbols based on user input can lead to a particular sort of denial of service attack and other potential security problems. <a href="https://www.ruby-lang.org/en/news/2013/02/22/json-dos-cve-2013-0269/">The JSON gem suffered from this vulnerability before Ruby 2.0.0</a>, and Mr. Schneeman has some other examples of this vulnerability in <a href="http://www.sitepoint.com/symbol-gc-ruby-2-2/">his post about symbol garbage collection in Ruby 2.2</a>.</p>
+<p>For these and other reasons, strings are immutable in several other modern languages, such as Python, Java, C#, and Go, and Ruby is moving in the direction of freezing strings by default, too. Starting with Ruby 2.2, strings used as hash keys are frozen by default, and Ruby 3.0 will freeze all string literals by default. You can see what life is like with frozen string literals right now with the frozen_string_literal pragma, which is <a href="https://blog.blockscore.com/new-features-in-ruby-2-3/">available in Ruby 2.3 or later</a>.</p>
+
+<p>With frozen strings, one can take advantage of the wide array of methods available to String objects without incurring the performance penalty of instantiating loads of identical objects all the time. You can also make use of external libraries, in the form of gems, middleware, or whatever, that might force you to use strings in certain places where you might normally prefer symbols. Symbols, for example, are usually used for hash keys, but some software might expect strings are hash keys. Frozen strings bring many of the benefits of using symbols while maintaining compatibility.</p>
+
+<p>Frozen strings are also a good choice for creating objects based on user input. As Richard Schneeman points out in <a href="http://www.sitepoint.com/unraveling-string-key-performance-ruby-2-2/">his excellent post about string keys in Ruby 2.0</a>, creating symbols based on user input can lead to a particular sort of denial of service attack and other potential security problems. <a href="https://www.ruby-lang.org/en/news/2013/02/22/json-dos-cve-2013-0269/">The JSON gem suffered from this vulnerability before Ruby 2.0.0</a>, and Mr. Schneeman has some other examples of this vulnerability in <a href="http://www.sitepoint.com/symbol-gc-ruby-2-2/">his post about symbol garbage collection in Ruby 2.2</a>. Ruby now garbage collects dynamically generated symbols, so this vulnerability isn’t an issue in the latest versions of Ruby, but older versions are common enough that this is still a real concern.</p>
 
 <hr />
 
-<p>Even though Ruby will soon be freezing strings by default, the absolute fastest way to freeze a string is to do it manually. Embrace it. It’s the low-hanging fruit of Ruby optimization. So, when you’ve written an application or a gem or anything in Ruby and you’re looking to speed it up or reduce its memory footprint, look to <code>#freeze</code>.</p>
+<p>Even though Ruby will soon be freezing strings by default, the absolute fastest way to freeze a string is to do it manually. Embrace it. It’s the low-hanging fruit of Ruby optimization. So, when you’ve written an application or a gem or anything in Ruby and you’re looking to speed it up or reduce its memory footprint, look to <code>#freeze</code>.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup></p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>This is not strictly true in newer versions of Ruby - dynamically generated symbols (created using <code>#to_sym</code>) are garbage collected. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Mr. Schneeman has written <a href="http://www.sitepoint.com/ruby-uses-memory/">another pretty comprehensive post</a> about <code>#freeze</code> and memory usage that focuses specifically on memory optimization and suggests several tools for profiling your Ruby code for memory usage. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 </div>
 
 
