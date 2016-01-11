@@ -4,7 +4,7 @@
   <title><![CDATA[Category: flatiron | Basic Object]]></title>
   <link href="http://flats.github.io/blog/categories/flatiron/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2016-01-11T01:33:03-05:00</updated>
+  <updated>2016-01-11T01:34:05-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -30,7 +30,7 @@
 
 <p>There are a couple of reasons you might want to use it.</p>
 
-<h3 id="make-an-object-immutable">1. Make an Object Immutable</h3>
+<h3 id="making-an-object-immutable">1. Making an Object Immutable</h3>
 
 <p>Ruby constants are really just variables that you shouldn’t change. Ruby will warn you if you change a constant, but it won’t raise an exception. So, if you really want to have Ruby enforce the constancy of a constant, you can freeze that object.</p>
 
