@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2016-01-11T01:35:16-05:00</updated>
+  <updated>2016-01-11T01:36:08-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -61,7 +61,7 @@
 
 <p>Therefore, freezing a string literal that you don’t ever intend to modify (such as <code>"/"</code> and the format string <code>"%09d"</code> in the example above) in a method that gets called multiple times can result in substantial memory savings and faster performance. Ruby will allocate those string objects the first time the method is called and then just reference those existing string objects on every subsequent call.</p>
 
-<h1 id="an-immutable-future">An Immutable Future</h1>
+<h2 id="an-immutable-future">An Immutable Future</h2>
 
 <p>For these and other reasons, strings are immutable in several other modern languages, such as Python, Java, C#, and Go, and Ruby is moving in the direction of freezing strings by default, too. Starting with Ruby 2.2, strings used as hash keys are frozen by default, and Ruby 3.0 will freeze all string literals by default. You can see what life is like with frozen string literals right now with the frozen_string_literal pragma, which is <a href="https://blog.blockscore.com/new-features-in-ruby-2-3/">available in Ruby 2.3 or later</a>.</p>
 
