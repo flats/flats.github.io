@@ -112,15 +112,15 @@
 <p>Much as the HTML <code>&lt;canvas&gt;</code> element allows us to get a 2D or 3D drawing context in JavaScript, the <code>AudioContext()</code> constructor gives us a context in which we can connect sound sources and destinations (which the Web Audio API collectively calls <code>AudioNode</code>s). Everything that the Web Audio API does happens within AudioContext objects, which are directed graphs of AudioNodes that are responsible for receiving, producing, transforming, and emitting audio signals.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> In this way, it works similarly to my beloved Minimoog compact modular synthesizer from the 1970s, with its oscillators, mixer, and filters, or to a recording studio with its many microphones, processors (EQ, compression, effects, and so on), mixing console, and recording devices (tape machines and computers).</p>
 
 <div class="bogus-wrapper"><notextile><figure>
-  <img src="/images/minimoog800x600.png" alt="My beloved Model D Minimoog" title="Minimoog Model D Control Panel" />  
-  <figcaption>The control panel of my beloved Model D Minimoog.</figcaption>
+  <img src="/images/minimoog800x600.jpg" alt="My beloved Model D Minimoog" title="Minimoog Model D Control Panel" />  
+  <figcaption style="width: 100%; margin-bottom: 2.25em; font-size: .8em; text-align: center;">The control panel of my beloved Model D Minimoog.</figcaption>
 </figure></notextile></div>
 
 <p>In this case, the callback passed to <code>getUserMedia()</code>, <code>gotStream()</code>, is called when the stream is successfully obtained and goes about creating a bunch of AudioNodes on the context and connecting them. There’s an <code>inputPoint</code> node for controlling gain, a <code>realAudioInput</code> for actually getting the audio, an <code>analyserNode</code> for performing a Fourier transform on the audio (this is for displaying the spectrograph or “analyser”), and finally a <code>zeroGain</code> node that is the endpoint of the audio in the context. The recorder just records audio and doesn’t actually output any audio directly, so the <code>zeroGain</code> just receives the audio at the end of the chain and silences it. Right before that connection is made, a new <code>Recorder</code> object is created with the stream from <code>getUserMedia()</code> as its source.</p>
 
 <div class="bogus-wrapper"><notextile><figure>
   <img src="/images/audio-graph.png" alt="Graphical representation of audio graph" title="AudioRecorder Audio Graph" />  
-  <figcaption>A graphical representation of the audio graph created in <em>gotStream()</em>.</figcaption>
+  <figcaption style="width: 100%; margin-bottom: 2.25em; font-size: .8em; text-align: center;">A graphical representation of the audio graph created in <em>gotStream()</em>.</figcaption>
 </figure></notextile></div>
 
 <p>Okay, so that covers the initialization of the application. The rest of the application, save the analyzer that I won’t cover in detail here, is event driven. The <code>toggleRecord()</code> function is triggered by the click event on the record button, which in turn either stops or starts the recording.</p>
