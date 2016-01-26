@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2016-01-11T01:36:08-05:00</updated>
+  <updated>2016-01-25T23:52:51-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -12,6 +12,76 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    
+    <title type="html"><![CDATA[AudioRecorder Walkthrough: Web Audio, WebRTC, and Web Workers]]></title>
+    <link href="http://flats.github.io/blog/2016/01/25/audiorecorder-walkthrough-web-audio-and-webrtc/"/>
+    
+    <updated>2016-01-25T13:09:44-05:00</updated>
+    <id>http://flats.github.io/blog/2016/01/25/audiorecorder-walkthrough-web-audio-and-webrtc</id>
+    
+    <content type="html"><![CDATA[<p>As a musician, engineer, and web developer, it has been very exciting to watch the Web Audio and WebRTC APIs mature. I believe that a robust platform for audio on the web has the potential to usher in a new era of collaborative music creation and social audio sharing. While native desktop DAW applications such as Pro Tools, Logic, Ableton Live, FL Studio, GarageBand, Digital Performer, and Cubase have grown more powerful and flexible over the last several years, facilities for collaboration and social sharing haven’t kept pace.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> Perhaps the DAW of the future will be a web application, the audio equivalent of Google Docs. One can dream.</p>
+
+<h2 id="recorderjs">recorder.js</h2>
+
+<p>In this post, I’ll walk through a popular demo of recording with the Web Audio API. In the process, I’ll touch on the basics of the Web Audio API, Web Workers, and WebRTC, a trio of fledgling web technologies that combine to allow us to record and process audio in the brower.</p>
+
+<p>The <a href="http://webaudiodemos.appspot.com/">AudioRecorder demo</a> is simple recording interface comprising three parts: an animated spectrograph of the client’s current audio input, a record button that starts and stops recording audio (and displaying the recorded audio’s waveform) from that input, and a save button that allows the user to download the recorded audio as a WAV file. I’m just going to focus on the latter two here, those responsible for recording audio, displaying the audio’s waveform while recording, and finally saving the recording. Most of this functionality comes from <a href="https://github.com/mattdiamond/Recorderjs">Matt Diamond’s fantastic recorder.js</a> plugin.</p>
+
+<h2 id="part-1-mainjs">Part 1: main.js</h2>
+
+<p>You can <a href="https://webaudiodemos.appspot.com/AudioRecorder/js/main.js">follow along with main.js here</a>.</p>
+
+<p>Like most JavaScript that takes advantage of bleeding-edge browser features, this application’s Javascript begins with a whole bunch of feature detection to make sure that the browser is capable of animating the audio display and obtaining an audio stream using WebRTC. WebRTC provides access to a video and/or audio stream from the user using <code>navigator.getUserMedia()</code>, which takes a parameter of <code>constraints</code>. The constraints are either <code>optional</code> or <code>mandatory</code>. In this case, the recorder is using the <code>mandatory</code> constraints to disable a handful of default audio behaviors in Chrome.</p>
+
+<p>Much as the HTML <code>&lt;canvas&gt;</code> element allows us to get a 2D or 3D drawing context in JavaScript, the <code>AudioContext()</code> constructor gives us a context in which we can connect sound sources and destinations (which the Web Audio API collectively calls <code>AudioNode</code>s). Everything that the Web Audio API does happens within AudioContext objects, which are directed graphs of AudioNodes that are responsible for receiving, producing, transforming, and emitting audio signals.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> In this way, it works similarly to my beloved Minimoog compact modular synthesizer from the 1970s, with its oscillators, mixer, and filters, or to a recording studio with its many microphones, processors (EQ, compression, effects, and so on), mixing console, and recording devices (tape machines and computers).</p>
+
+<div class="bogus-wrapper"><notextile><figure>
+  <img src="http://flats.github.io/images/minimoog800x600.png" alt="My beloved Model D Minimoog" title="Minimoog Model D Control Panel" />  
+  <figcaption>The control panel of my beloved Model D Minimoog.</figcaption>
+</figure></notextile></div>
+
+<p>In this case, the callback passed to <code>getUserMedia()</code>, <code>gotStream()</code>, is called when the stream is successfully obtained and goes about creating a bunch of AudioNodes on the context and connecting them. There’s an <code>inputPoint</code> node for controlling gain, a <code>realAudioInput</code> for actually getting the audio, an <code>analyserNode</code> for performing a Fourier transform on the audio (this is for displaying the spectrograph or “analyser”), and finally a <code>zeroGain</code> node that is the endpoint of the audio in the context. The recorder just records audio and doesn’t actually output any audio directly, so the <code>zeroGain</code> just receives the audio at the end of the chain and silences it. Right before that connection is made, a new <code>Recorder</code> object is created with the stream from <code>getUserMedia()</code> as its source.</p>
+
+<div class="bogus-wrapper"><notextile><figure>
+  <img src="http://flats.github.io/images/audio-graph.png" alt="Graphical representation of audio graph" title="AudioRecorder Audio Graph" />  
+  <figcaption>A graphical representation of the audio graph created in <em>gotStream()</em>.</figcaption>
+</figure></notextile></div>
+
+<p>Okay, so that covers the initialization of the application. The rest of the application, save the analyzer that I won’t cover in detail here, is event driven. The <code>toggleRecord()</code> function is triggered by the click event on the record button, which in turn either stops or starts the recording.</p>
+
+<p>We’ll start with the recorder activation. <code>clear()</code> is called on the instance of <code>Recorder</code> created in <code>gotStream()</code>, followed by <code>record()</code>. The methods are implemented in Matt Diamond’s recorder.js.</p>
+
+<h2 id="part-2-recorderjs">Part 2: recorder.js</h2>
+
+<p>The Web Audio API provides many pre-built AudioNode objects that cover most use cases. However, it’s also possible to create your own processing object directly in JavaScript using the <code>createScriptProcessor()</code> method of <code>AudioContext</code>, which is how Mr. Diamond deals with recording audio in recorder.js.</p>
+
+<p>In addition, Mr. Diamond’s recorder.js makes use of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">Web Worker API</a>, another new browser API that gives developers the ability to run background processes. The API exposes a constructor function, <code>Worker()</code>, that takes an argument of the JavaScript file that will run on its own thread in the background. The worker in recorder.js is assigned to <a href="https://webaudiodemos.appspot.com/AudioRecorder/js/recorderjs/recorderWorker.js">the recorderWorker.js file</a>, which we’ll get to in a moment.</p>
+
+<p>The <code>Recorder()</code> constructor begins by creating a script processor and setting a buffer length for recording audio. Communication between a worker and the script that spawned it is achieved through message passing, so this function then passes the ‘init’ message to the worker along with a config object that specifies the sample rate.</p>
+
+<p>It is in the worker script that all of the guts of the recorder reside. The entire process of recording audio into the left and right channel buffers, transferring these buffers to</p>
+
+<h3 id="more-resources">More Resources</h3>
+
+<p>Web Audio API at MDN: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API</a></p>
+
+<p>Tutorial at HTML5 Rocks: <a href="http://www.html5rocks.com/en/tutorials/webaudio/intro/">http://www.html5rocks.com/en/tutorials/webaudio/intro/</a></p>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Soundcloud and Bandcamp are fantastic platforms, but because neither of them provide any creation tools (unlike platforms like Instagram and Vine), they’re largely out of reach for average users. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>There’s more about the audio graph in Boris Smus’s <a href="http://chimera.labs.oreilly.com/books/1234000001552">excellent book on the Web Audio API</a>. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+]]></content>
+    
+  </entry>
   
   <entry>
     
