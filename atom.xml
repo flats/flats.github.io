@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2016-01-26T10:01:10-05:00</updated>
+  <updated>2016-01-26T10:28:14-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -21,7 +21,7 @@
     <updated>2016-01-25T13:09:44-05:00</updated>
     <id>http://flats.github.io/blog/2016/01/25/audiorecorder-walkthrough-web-audio-and-webrtc</id>
     
-    <content type="html"><![CDATA[<p>As a musician, engineer, and web developer, it has been very exciting to watch the Web Audio and WebRTC APIs mature. I believe that a robust platform for audio on the web has the potential to usher in a new era of collaborative music creation and social audio sharing. While native desktop DAW applications such as Pro Tools, Logic, Ableton Live, FL Studio, GarageBand, Digital Performer, and Cubase have grown more powerful and flexible over the last several years, facilities for collaboration and social sharing haven’t kept pace.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> Perhaps the DAW of the future will be a web application, the audio equivalent of Google Docs. One can dream.</p>
+    <content type="html"><![CDATA[<p>As a musician, engineer, and web developer, it has been very exciting to watch the Web Audio and WebRTC APIs mature. A robust platform for audio on the web has the potential to usher in a new era of collaborative music creation and social audio sharing. While native desktop DAW applications such as Pro Tools, Logic, Ableton Live, FL Studio, GarageBand, Digital Performer, and Cubase have grown more powerful and flexible over the last several years, facilities for collaboration and social sharing haven’t really kept pace.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> Perhaps the DAW of the future will be a web application, something like the audio equivalent of Google Docs. One can dream.</p>
 
 <h2 id="recorderjs">recorder.js</h2>
 
