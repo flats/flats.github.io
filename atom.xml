@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2016-01-25T23:58:19-05:00</updated>
+  <updated>2016-01-26T09:55:58-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -33,9 +33,9 @@
 
 <p>You can <a href="https://webaudiodemos.appspot.com/AudioRecorder/js/main.js">follow along with main.js here</a>.</p>
 
-<p>Like most JavaScript that takes advantage of bleeding-edge browser features, this application’s Javascript begins with a whole bunch of feature detection to make sure that the browser is capable of animating the audio display and obtaining an audio stream using WebRTC. WebRTC provides access to a video and/or audio stream from the user using <code>navigator.getUserMedia()</code>, which takes a parameter of <code>constraints</code>. The constraints are either <code>optional</code> or <code>mandatory</code>. In this case, the recorder is using the <code>mandatory</code> constraints to disable a handful of default audio behaviors in Chrome.</p>
+<p>Like most JavaScript that takes advantage of bleeding-edge browser features, this application’s Javascript begins with a whole bunch of feature detection to make sure that the browser is capable of animating the audio display and obtaining an audio stream using WebRTC. At this time, the WebRTC <a href="http://caniuse.com/#feat=rtcpeerconnection">is partially implemented in some browsers and not supported at all in several browsers</a>. It provides access to a video and/or audio stream from the user using <code>navigator.getUserMedia()</code>, which takes a parameter of <code>constraints</code>. The constraints are either <code>optional</code> or <code>mandatory</code>. In this case, the recorder is using the <code>mandatory</code> constraints to disable a handful of default audio behaviors in Chrome.</p>
 
-<p>Much as the HTML <code>&lt;canvas&gt;</code> element allows us to get a 2D or 3D drawing context in JavaScript, the <code>AudioContext()</code> constructor gives us a context in which we can connect sound sources and destinations (which the Web Audio API collectively calls <code>AudioNode</code>s). Everything that the Web Audio API does happens within AudioContext objects, which are directed graphs of AudioNodes that are responsible for receiving, producing, transforming, and emitting audio signals.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> In this way, it works similarly to my beloved Minimoog compact modular synthesizer from the 1970s, with its oscillators, mixer, and filters, or to a recording studio with its many microphones, processors (EQ, compression, effects, and so on), mixing console, and recording devices (tape machines and computers).</p>
+<p>Now we get into the Web Audio API, which allows us to work with audio in the browser. It <a href="http://caniuse.com/#feat=audio-api">is quite well-supported in modern browsers</a>. Much as the HTML <code>&lt;canvas&gt;</code> element allows us to get a 2D or 3D drawing context in JavaScript, the <code>AudioContext()</code> constructor gives us a context in which we can connect sound sources and destinations (which the Web Audio API collectively calls <code>AudioNode</code>s). Everything that the Web Audio API does happens within AudioContext objects, which are directed graphs of AudioNodes that are responsible for receiving, producing, transforming, and emitting audio signals.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> In this way, it works similarly to my beloved Minimoog compact modular synthesizer from the 1970s, with its oscillators, mixer, and filters, or to a recording studio with its many microphones, processors (EQ, compression, effects, and so on), mixing console, and recording devices (tape machines and computers).</p>
 
 <div class="bogus-wrapper"><notextile><figure>
   <img src="http://flats.github.io/images/minimoog800x600.jpg" alt="My beloved Model D Minimoog" title="Minimoog Model D Control Panel" />  
@@ -55,13 +55,17 @@
 
 <h2 id="part-2-recorderjs">Part 2: recorder.js</h2>
 
-<p>The Web Audio API provides many pre-built AudioNode objects that cover most use cases. However, it’s also possible to create your own processing object directly in JavaScript using the <code>createScriptProcessor()</code> method of <code>AudioContext</code>, which is how Mr. Diamond deals with recording audio in recorder.js.</p>
+<p>The Web Audio API provides many pre-built AudioNode objects that cover most use cases that are generally written in a lower-level language than JavaScript (usually C or C++). However, it’s also possible to create your own processing object directly in JavaScript using the <code>createScriptProcessor()</code> method of <code>AudioContext</code>, which is how Mr. Diamond deals with recording audio in recorder.js.</p>
 
-<p>In addition, Mr. Diamond’s recorder.js makes use of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">Web Worker API</a>, another new browser API that gives developers the ability to run background processes. The API exposes a constructor function, <code>Worker()</code>, that takes an argument of the JavaScript file that will run on its own thread in the background. The worker in recorder.js is assigned to <a href="https://webaudiodemos.appspot.com/AudioRecorder/js/recorderjs/recorderWorker.js">the recorderWorker.js file</a>, which we’ll get to in a moment.</p>
+<p>In addition, Mr. Diamond’s recorder.js makes use of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">Web Worker API</a>, another relatively new browser API that gives developers the ability to run background processes. The API, which <a href="http://caniuse.com/#feat=webworkers">is quite well-supported in modern browsers</a>, exposes a constructor function, <code>Worker()</code>, that takes an argument of the JavaScript file that will run on its own thread in the background. The worker in recorder.js is assigned to <a href="https://webaudiodemos.appspot.com/AudioRecorder/js/recorderjs/recorderWorker.js">the recorderWorker.js file</a>, which we’ll get to in a moment.</p>
 
 <p>The <code>Recorder()</code> constructor begins by creating a script processor and setting a buffer length for recording audio. Communication between a worker and the script that spawned it is achieved through message passing, so this function then passes the ‘init’ message to the worker along with a config object that specifies the sample rate.</p>
 
-<p>It is in the worker script that all of the guts of the recorder reside. The entire process of recording audio into the left and right channel buffers, transferring these buffers to</p>
+<p>The worker script contains all of the guts of the recorder. The entire process of passing audio from the left and right channel input buffers to the recording buffers and creating a WAV file from those buffers is encapsulated in this worker. The <code>switch</code> statement on the ‘onmessage’ event at the top of the function, which receives the ‘command’ and ‘buffer’ parameters sent from recorder.js, controls the workers behavior - the ‘record’, ‘exportWAV’, ‘getBuffers’, and ‘clear’ messages kick off those actions in the worker.</p>
+
+<h2 id="intermission">Intermission</h2>
+
+<p>I’ll be updating this post with more details on this worker and the recorder.js flow at a later date. In the meantime, make some noise at your laptop.</p>
 
 <h3 id="more-resources">More Resources</h3>
 
@@ -72,7 +76,7 @@
 <div class="footnotes">
   <ol>
     <li id="fn:1">
-      <p>Soundcloud and Bandcamp are fantastic platforms, but because neither of them provide any creation tools (unlike platforms like Instagram and Vine), they’re largely out of reach for average users. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p>Soundcloud and Bandcamp are fantastic platforms, but because neither of them provide any creation tools (unlike platforms like Instagram and Vine), they’re largely out of reach for non-professional users. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
     <li id="fn:2">
       <p>There’s more about the audio graph in Boris Smus’s <a href="http://chimera.labs.oreilly.com/books/1234000001552">excellent book on the Web Audio API</a>. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
