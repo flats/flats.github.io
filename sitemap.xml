@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://flats.github.io/blog/2016/02/24/custom-ember-leaflet-2-dot-0-components/</loc>
+    <lastmod>2016-02-24T11:03:47-05:00</lastmod>
+  </url>
+  <url>
     <loc>http://flats.github.io/blog/2016/02/07/sets-and-set-operators-in-ruby/</loc>
     <lastmod>2016-02-07T01:16:36-05:00</lastmod>
   </url>

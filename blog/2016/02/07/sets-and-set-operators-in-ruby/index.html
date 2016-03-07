@@ -101,7 +101,7 @@
 
 <ol>
   <li>
-    <p>A set only contains unique elements, which makes uniqueness checks unnecessary. Adding an element to a set that is already a member of that set will just fail silently.</p>
+    <p>A set only contains unique elements, which makes uniqueness checks unnecessary. Adding an element to a set that is already a member of that set will fail silently.</p>
   </li>
   <li>
     <p>While looking up an element by index is not possible (as it is with <code>Array</code>), looking up an element is faster than in an array<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup>. This is, <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/set/rdoc/Set.html#method-i-union">as the Ruby documentation says</a>, because “<code>Set</code> uses Hash as storage.”</p>
@@ -110,7 +110,7 @@
 
 <p>In addition, the <code>Set</code> class introduces some interesting methods (including <code>#disjoint?</code>, <code>#intersect?</code>, <code>#classify</code>, and <code>#divide</code>) and operators. Perhaps the most useful of these are <code>&amp;</code> (the intersection operator), <code>|</code> (the union operator), <code>-</code> (the difference operator), and <code>^</code> (the exclusion operator). <em>All but the last of these can also be used with arrays in Ruby</em>.</p>
 
-<p>Some quick examples:</p>
+<p>Some examples:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -174,6 +174,8 @@
         <a class="basic-alignment left" href="/blog/2016/01/25/audiorecorder-walkthrough-web-audio-and-webrtc/" title="Previous Post: AudioRecorder Walkthrough: Web Audio, WebRTC, and Web Workers">&laquo; AudioRecorder Walkthrough: Web Audio, WebRTC, and Web Workers</a>
       
       
+        <a class="basic-alignment right" href="/blog/2016/02/24/custom-ember-leaflet-2-dot-0-components/" title="Next Post: Custom Ember Leaflet 2.0 Components">Custom Ember Leaflet 2.0 Components &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -185,6 +187,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/02/24/custom-ember-leaflet-2-dot-0-components/">Custom Ember Leaflet 2.0 Components</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2016/02/07/sets-and-set-operators-in-ruby/">Sets and Set Operators in Ruby</a>
@@ -200,10 +206,6 @@
     
       <li class="post">
         <a href="/blog/2015/12/10/closures-yield-and-the-enumerable-module/">Closures, Yield, and the Enumerable Module</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/02/getting-to-know-rubys-map-and-reduce/">Getting to Know Ruby's Map and Reduce</a>
       </li>
     
   </ul>

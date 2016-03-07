@@ -4,7 +4,7 @@
   <title><![CDATA[Basic Object]]></title>
   <link href="http://flats.github.io/atom.xml" rel="self"/>
   <link href="http://flats.github.io/"/>
-  <updated>2016-02-07T02:18:37-05:00</updated>
+  <updated>2016-03-07T00:33:34-05:00</updated>
   <id>http://flats.github.io/</id>
   <author>
     <name><![CDATA[D. Flaherty]]></name>
@@ -12,6 +12,97 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Custom Ember Leaflet 2.0 Components]]></title>
+    <link href="http://flats.github.io/blog/2016/02/24/custom-ember-leaflet-2-dot-0-components/"/>
+    
+    <updated>2016-02-24T11:03:47-05:00</updated>
+    <id>http://flats.github.io/blog/2016/02/24/custom-ember-leaflet-2-dot-0-components</id>
+    
+    <content type="html"><![CDATA[<p>Ember Leaflet is an incredibly powerful and well-designed addon for Ember 1 and 2. Miguel Andrade did a fantastic job of updating the <a href="https://github.com/gabesmed/ember-leaflet">original project</a> for Ember 2.0 and writing some <a href="http://www.ember-leaflet.com/docs">great documentation</a>. The documentation does not, however, cover extending components and modifying their event listeners. Here are some tips for dealing with those issues.</p>
+
+<h2 id="new-locations-for-addon-components">New Locations for Addon Components</h2>
+
+<p>All of the layer components that were in the ‘layers’ directory of the addon in the first version are now in the ‘components’ directory. Your <code>import</code> statement goes from:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">import</span> <span class="nx">MarkerLayer</span> <span class="nx">from</span> <span class="s1">&#39;ember-leaflet/layers/marker&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>in <a href="https://github.com/gabesmed/ember-leaflet">the first version of Ember Leaflet</a> to</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">import</span> <span class="nx">MarkerLayer</span> <span class="nx">from</span> <span class="s1">&#39;ember-leaflet/components/marker-layer&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>in the latest version.</p>
+
+<h2 id="overriding-event-listeners-for-custom-components">Overriding Event Listeners for Custom Components</h2>
+
+<p>There’s no officially supported way to override event listeners in this new version of Ember Leaflet, but, as Alex Grant pointed out in <a href="https://github.com/miguelcobain/ember-leaflet/issues/11">a GitHub issue</a>, there is an undocumented way to do this - write a function whose name corresponds to a Leaflet event prefixed with an underscore. So:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">_click</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You just clicked a marker!&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>This works because of the way that Ember Leaflet assigns event listeners to each component’s underlying Leaflet object when the component is initialized. There are more details about this in the aforementioned issue.</p>
+
+<h2 id="accessing-a-components-leaflet-object">Accessing a Component’s Leaflet Object</h2>
+
+<p>While you can add another event listener using the underscore method described above, removing the default behavior requires accessing the component’s underlying Leaflet object. This object is the component’s <code>_layer</code> property, and it’s created when Ember Leaflet calls the component’s <code>layerSetup()</code> function.</p>
+
+<p>I was able to remove a default event listener of the Leaflet object by defining a <code>layerSetup()</code> function for my custom component and then using Ember’s <code>_super()</code> function to call the parent component’s function.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">layerSetup</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">  <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">();</span>
+</span><span class="line">  <span class="k">this</span><span class="p">.</span><span class="nx">_layer</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="the-beginnings-of-a-custom-marker">The Beginnings of a Custom Marker</h2>
+
+<p>My goal in digging into this was to override the default marker click event only in a certain state. I haven’t yet worked out the details here, but I have at least sorted out extending the component, removing the default click event, and defining a new click event.</p>
+
+<p>This is the basic jist of my custom component right now.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">import</span> <span class="nx">MarkerLayer</span> <span class="nx">from</span> <span class="s1">&#39;ember-leaflet/components/marker-layer&#39;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kr">export</span> <span class="k">default</span> <span class="nx">MarkerLayer</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">layerSetup</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">();</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">_layer</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">);</span>
+</span><span class="line">  <span class="p">},</span>
+</span><span class="line">  <span class="nx">_click</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You just clicked a marker!&#39;</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Let me know if you have any ideas! I’ll update this post when I’ve finished that last step.</p>
+]]></content>
+    
+  </entry>
   
   <entry>
     
@@ -27,7 +118,7 @@
 
 <ol>
   <li>
-    <p>A set only contains unique elements, which makes uniqueness checks unnecessary. Adding an element to a set that is already a member of that set will just fail silently.</p>
+    <p>A set only contains unique elements, which makes uniqueness checks unnecessary. Adding an element to a set that is already a member of that set will fail silently.</p>
   </li>
   <li>
     <p>While looking up an element by index is not possible (as it is with <code>Array</code>), looking up an element is faster than in an array<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup>. This is, <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/set/rdoc/Set.html#method-i-union">as the Ruby documentation says</a>, because “<code>Set</code> uses Hash as storage.”</p>
@@ -36,7 +127,7 @@
 
 <p>In addition, the <code>Set</code> class introduces some interesting methods (including <code>#disjoint?</code>, <code>#intersect?</code>, <code>#classify</code>, and <code>#divide</code>) and operators. Perhaps the most useful of these are <code>&amp;</code> (the intersection operator), <code>|</code> (the union operator), <code>-</code> (the difference operator), and <code>^</code> (the exclusion operator). <em>All but the last of these can also be used with arrays in Ruby</em>.</p>
 
-<p>Some quick examples:</p>
+<p>Some examples:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>

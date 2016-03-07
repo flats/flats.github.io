@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Custom Ember Leaflet 2.0 Components - Basic Object</title>
+  <meta name="author" content="D. Flaherty">
+
+  
+  <meta name="description" content="Ember Leaflet is an incredibly powerful and well-designed addon for Ember 1 and 2. Miguel Andrade did a fantastic job of updating the original &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://flats.github.io/blog/2016/02/24/custom-ember-leaflet-2-dot-0-components">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Basic Object" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+	<div class="header-title"><a href="/">Basic Object</a></div>
+
+
+	<br><div class="header-subtitle">Deep thoughts on web programming</div>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:flats.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+  
+    
+      <h1 class="entry-title">Custom Ember Leaflet 2.0 Components</h1>
+    
+  
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-24T11:03:47-05:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Ember Leaflet is an incredibly powerful and well-designed addon for Ember 1 and 2. Miguel Andrade did a fantastic job of updating the <a href="https://github.com/gabesmed/ember-leaflet">original project</a> for Ember 2.0 and writing some <a href="http://www.ember-leaflet.com/docs">great documentation</a>. The documentation does not, however, cover extending components and modifying their event listeners. Here are some tips for dealing with those issues.</p>
+
+<h2 id="new-locations-for-addon-components">New Locations for Addon Components</h2>
+
+<p>All of the layer components that were in the ‘layers’ directory of the addon in the first version are now in the ‘components’ directory. Your <code>import</code> statement goes from:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">import</span> <span class="nx">MarkerLayer</span> <span class="nx">from</span> <span class="s1">&#39;ember-leaflet/layers/marker&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>in <a href="https://github.com/gabesmed/ember-leaflet">the first version of Ember Leaflet</a> to</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">import</span> <span class="nx">MarkerLayer</span> <span class="nx">from</span> <span class="s1">&#39;ember-leaflet/components/marker-layer&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>in the latest version.</p>
+
+<h2 id="overriding-event-listeners-for-custom-components">Overriding Event Listeners for Custom Components</h2>
+
+<p>There’s no officially supported way to override event listeners in this new version of Ember Leaflet, but, as Alex Grant pointed out in <a href="https://github.com/miguelcobain/ember-leaflet/issues/11">a GitHub issue</a>, there is an undocumented way to do this - write a function whose name corresponds to a Leaflet event prefixed with an underscore. So:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">_click</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You just clicked a marker!&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>This works because of the way that Ember Leaflet assigns event listeners to each component’s underlying Leaflet object when the component is initialized. There are more details about this in the aforementioned issue.</p>
+
+<h2 id="accessing-a-components-leaflet-object">Accessing a Component’s Leaflet Object</h2>
+
+<p>While you can add another event listener using the underscore method described above, removing the default behavior requires accessing the component’s underlying Leaflet object. This object is the component’s <code>_layer</code> property, and it’s created when Ember Leaflet calls the component’s <code>layerSetup()</code> function.</p>
+
+<p>I was able to remove a default event listener of the Leaflet object by defining a <code>layerSetup()</code> function for my custom component and then using Ember’s <code>_super()</code> function to call the parent component’s function.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">layerSetup</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">  <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">();</span>
+</span><span class="line">  <span class="k">this</span><span class="p">.</span><span class="nx">_layer</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="the-beginnings-of-a-custom-marker">The Beginnings of a Custom Marker</h2>
+
+<p>My goal in digging into this was to override the default marker click event only in a certain state. I haven’t yet worked out the details here, but I have at least sorted out extending the component, removing the default click event, and defining a new click event.</p>
+
+<p>This is the basic jist of my custom component right now.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">import</span> <span class="nx">MarkerLayer</span> <span class="nx">from</span> <span class="s1">&#39;ember-leaflet/components/marker-layer&#39;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kr">export</span> <span class="k">default</span> <span class="nx">MarkerLayer</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">layerSetup</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">();</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">_layer</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">);</span>
+</span><span class="line">  <span class="p">},</span>
+</span><span class="line">  <span class="nx">_click</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You just clicked a marker!&#39;</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Let me know if you have any ideas! I’ll update this post when I’ve finished that last step.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">D. Flaherty</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-24T11:03:47-05:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://flats.github.io/blog/2016/02/24/custom-ember-leaflet-2-dot-0-components/" data-via="" data-counturl="http://flats.github.io/blog/2016/02/24/custom-ember-leaflet-2-dot-0-components/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/02/07/sets-and-set-operators-in-ruby/" title="Previous Post: Sets and Set Operators in Ruby">&laquo; Sets and Set Operators in Ruby</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/02/24/custom-ember-leaflet-2-dot-0-components/">Custom Ember Leaflet 2.0 Components</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/07/sets-and-set-operators-in-ruby/">Sets and Set Operators in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/25/audiorecorder-walkthrough-web-audio-and-webrtc/">AudioRecorder Walkthrough: Web Audio, WebRTC, and Web Workers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/03/frozen-strings/">Frozen Strings, Symbols, and Garbage Collection in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/10/closures-yield-and-the-enumerable-module/">Closures, Yield, and the Enumerable Module</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 -  D. Flaherty <br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> + <a href="https://github.com/ioveracker/mnml">mnml</a>.
+	  
+  </span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
